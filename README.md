@@ -23,7 +23,7 @@ Or install it yourself as:
 Hanami events support different adapters for sending events:
 
 * Memory
-* Redis
+* Redis (only with `ConnectionPool` gem)
 
 Just initialize `Hanami::Event` instance with adapter:
 
@@ -32,7 +32,8 @@ Just initialize `Hanami::Event` instance with adapter:
 Hanami::Events.build(:memory)
 
 # works with redis
-Hanami::Events.build(:redis, { port: 1111, ... })
+redis = ConnectionPool.new(size: 5, timeout: 5) { Redis.new(host: 'localhost', port: 6379) }
+Hanami::Events.build(:redis, redis: redis)
 ```
 
 ### Broadcaster
