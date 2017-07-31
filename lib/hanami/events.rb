@@ -1,3 +1,4 @@
+require "hanami/events/adapter"
 require "hanami/events/version"
 
 module Hanami
@@ -5,7 +6,7 @@ module Hanami
     attr_reader :adapter
 
     def initialize(adapter_name, **options)
-      @adapter = adapter_name
+      @adapter = Adapter.build(adapter_name, options)
     end
   end
 end
