@@ -31,7 +31,7 @@ Hanami::Events.build(:memory)
 
 
 #### Redis
-Redis adapter works only with `ConnectionPool` gem. Hanami events uses redis `SUBSCRIBE` under the hood. Be careful 1 redis pool == 1 subscriber.
+Redis adapter works only with `ConnectionPool` gem. Hanami events uses redis `SUBSCRIBE` under the hood.
 
 ```ruby
 redis = ConnectionPool.new(size: 5, timeout: 5) { Redis.new(host: 'localhost', port: 6379) }
