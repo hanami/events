@@ -8,10 +8,12 @@ RSpec.describe Hanami::Events do
   end
 
   describe '#broadcast' do
-    it 'broadcasts event to adapter' do
-      event.broadcast('user.created', user_id: 1)
-      expect(event.adapter.events).to eq('user.created' => [{ user_id: 1 }])
+    before do
+      event.subscribe('user.created') { |payload| payload }
     end
+
+    it { expect(event.broadcast('user.created', user_id: 1)).to eq [{ user_id: 1 }] }
+    it { expect(event.broadcast('user.deleted', user_id: 1)).to eq [nil] }
   end
 
   describe '#subscribe' do

@@ -2,20 +2,14 @@ module Hanami
   module Events
     class Adapter
       class Memory
-        attr_reader :events, :listeners
+        attr_reader :listeners
 
         def initialize
-          @events = {}
           @listeners = []
         end
 
-        def push(event_name, payload)
-          events[event_name] ||= []
-          events[event_name] << payload
-        end
-
         def announce(event_name, payload)
-          @listeners.each { |listener| listener.call(event_name, payload) }
+          @listeners.map { |listener| listener.call(event_name, payload) }
         end
 
         def subscribe_pattern(event_name, &block)
