@@ -29,21 +29,21 @@ Just initialize `Hanami::Event` instance with adapter:
 
 ```ruby
 # works only with memory
-Hanami::Events.new(:memory)
+Hanami::Events.build(:memory)
 
 # works with redis
-Hanami::Events.new(:redis, { port: 1111, ... })
+Hanami::Events.build(:redis, { port: 1111, ... })
 ```
 
 ### Broadcaster
 ```ruby
-events = Hanami::Events.new(:memory)
+events = Hanami::Events.build(:memory)
 events.broadcast('user.created', user: user)
 ```
 
 ### Subscriber
 ```ruby
-events = Hanami::Events.new(:memory)
+events = Hanami::Events.build(:memory)
 events.broadcast('user.created') { |payload| p payload }
 
 events.broadcast('user.created', user_id: 1)
