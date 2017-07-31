@@ -10,6 +10,10 @@ module Hanami
       def broadcast(event, **payload)
         adapter.push(event, payload)
       end
+
+      def subscribe(event_name, &block)
+        adapter.subscribe_pattern(event_name, &block)
+      end
     end
   end
 end

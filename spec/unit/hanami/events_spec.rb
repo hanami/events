@@ -13,4 +13,14 @@ RSpec.describe Hanami::Events do
       expect(event.adapter.events).to eq('user.created' => [{ user_id: 1 }])
     end
   end
+
+  describe '#subscribe' do
+    it 'pushes listener to listener list' do
+      expect(event.adapter.listeners.count).to eq 0
+      event.subscribe('event.name') { |payload| payload }
+      expect(event.adapter.listeners.count).to eq 1
+      event.subscribe('event.name') { |payload| payload }
+      expect(event.adapter.listeners.count).to eq 2
+    end
+  end
 end
