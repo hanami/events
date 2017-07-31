@@ -1,6 +1,6 @@
 # Hanami::Events
 
-[Experimental] Hanami library for building [Event-Driven Architecture](https://www.youtube.com/watch?v=STKCRSUsyP0)
+[Experimental] Hanami library for building [Event-Driven Architecture](https://www.youtube.com/watch?v=STKCRSUsyP0) without any global state.
 
 ## Installation
 
@@ -22,16 +22,18 @@ Or install it yourself as:
 ### Adapters
 Hanami events support different adapters for sending events:
 
-* Memory
-* Redis (only with `ConnectionPool` gem)
-
+####  Memory
 Just initialize `Hanami::Event` instance with adapter:
 
 ```ruby
-# works only with memory
 Hanami::Events.build(:memory)
+```
 
-# works with redis
+
+#### Redis
+Redis adapter works only with `ConnectionPool` gem. Hanami events uses redis `SUBSCRIBE` under the hood. Be careful 1 redis pool == 1 subscriber.
+
+```ruby
 redis = ConnectionPool.new(size: 5, timeout: 5) { Redis.new(host: 'localhost', port: 6379) }
 Hanami::Events.build(:redis, redis: redis)
 ```
