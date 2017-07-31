@@ -1,5 +1,11 @@
+require "hanami/events/version"
+
 module Hanami
-  module Events
-    require "hanami/events/version"
+  class Events
+    attr_reader :adapter
+
+    def initialize(adapter_name, **options)
+      @adapter = adapter_name
+    end
   end
 end
