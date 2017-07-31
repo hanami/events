@@ -1,7 +1,7 @@
 require_relative 'adapter/memory'
 
 module Hanami
-  class Events
+  module Events
     class Adapter
       def self.build(adapter_name, options)
         Memory.new

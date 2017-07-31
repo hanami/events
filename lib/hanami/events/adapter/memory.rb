@@ -1,5 +1,5 @@
 module Hanami
-  class Events
+  module Events
     class Adapter
       class Memory
       end
