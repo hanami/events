@@ -14,6 +14,10 @@ module Hanami
           events[event_name] << payload
         end
 
+        def announce(event_name, payload)
+          @listeners.each { |listener| listener.call(event_name, payload) }
+        end
+
         def subscribe_pattern(event_name, &block)
           @listeners << Listener.new(event_name, block)
         end
