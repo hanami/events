@@ -7,7 +7,7 @@ module Hanami
       def self.build(adapter_name, options)
         case adapter_name
         when :memory then Memory.new
-        when :redis then Redis.new
+        when :redis then Redis.new(**options)
         else
           Memory.new
         end
