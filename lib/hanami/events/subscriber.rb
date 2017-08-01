@@ -1,6 +1,6 @@
 module Hanami
   module Events
-    class Listener
+    class Subscriber
       def initialize(pattern, block)
         @pattern = pattern
         @block = block

@@ -8,11 +8,11 @@ module Hanami
       end
 
       def broadcast(event, **payload)
-        adapter.announce(event, payload)
+        adapter.broadcast(event, payload)
       end
 
       def subscribe(event_name, &block)
-        adapter.subscribe_pattern(event_name, &block)
+        adapter.subscribe(event_name, &block)
       end
     end
   end

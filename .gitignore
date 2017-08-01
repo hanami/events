@@ -7,3 +7,7 @@
 /pkg/
 /spec/reports/
 /tmp/
+tags
+*.swp
+.ruby-gemset
+.ruby-version

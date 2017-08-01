@@ -12,17 +12,19 @@ RSpec.describe Hanami::Events do
       event.subscribe('user.created') { |payload| payload }
     end
 
-    it { expect(event.broadcast('user.created', user_id: 1)).to eq [{ user_id: 1 }] }
-    it { expect(event.broadcast('user.deleted', user_id: 1)).to eq [nil] }
+    it 'calls #broadcast on adapter' do
+      expect(event).to receive(:broadcast).with('user.created', user_id: 1)
+      event.broadcast('user.created', user_id: 1)
+    end
   end
 
   describe '#subscribe' do
-    it 'pushes listener to listener list' do
-      expect(event.adapter.listeners.count).to eq 0
+    it 'pushes subscriber to subscribers list' do
+      expect(event.adapter.subscribers.count).to eq 0
       event.subscribe('event.name') { |payload| payload }
-      expect(event.adapter.listeners.count).to eq 1
+      expect(event.adapter.subscribers.count).to eq 1
       event.subscribe('event.name') { |payload| payload }
-      expect(event.adapter.listeners.count).to eq 2
+      expect(event.adapter.subscribers.count).to eq 2
     end
   end
 end

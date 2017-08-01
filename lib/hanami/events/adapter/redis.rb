@@ -4,30 +4,29 @@ module Hanami
   module Events
     class Adapter
       class Redis
-        EVENTS_NAME = 'hanami_event'
+        CHANNEL = 'hanami_events'
 
-        attr_reader :listeners
+        attr_reader :subscribers
 
-        def initialize(redis:)
-          @redis = redis
-          @listeners = []
-          @uniq_thread = false
+        def initialize(params)
+          @redis = params[:redis]
+          @subscribers = []
         end
 
-        def announce(event_name, payload)
-          @redis.publish(EVENTS_NAME, payload.to_json)
+        def broadcast(event_name, payload)
+          @redis.publish(CHANNEL, { event_name: event_name, **payload }.to_json)
         end
 
-        def subscribe_pattern(event_name, &block)
-          @listeners << Listener.new(event_name, block)
+        def subscribe(event_name, &block)
+          @subscribers << Subscriber.new(event_name, block)
 
           return if thread_spawned?
           thread_spawned!
 
           Thread.new do
             @redis.with do |connection|
-              connection.subscribe(EVENTS_NAME) do |on|
-                on.message { |_, message| call_listeners(event_name, message)  }
+              connection.subscribe(CHANNEL) do |on|
+                on.message { |_, message| call_subscribers(JSON.parse(message)) }
               end
             end
           end
@@ -43,11 +42,9 @@ module Hanami
           @thread_spawned = true
         end
 
-        def subscribe_to_events(connection)
-        end
-
-        def call_listeners(event_name, message)
-          @listeners.each { |listener| listener.call(event_name, JSON.parse(message)) }
+        def call_subscribers(payload)
+          event_name = payload.delete('event_name')
+          @subscribers.each { |subscriber| subscriber.call(event_name, payload) }
         end
       end
     end
