@@ -8,23 +8,23 @@ RSpec.describe Hanami::Events do
   end
 
   describe '#broadcast' do
+    let(:event_pattern) { 'user.created' }
+
     before do
-      event.subscribe('user.created') { |payload| payload }
+      event.subscribe(event_pattern) { |payload| payload }
     end
 
     it 'calls #broadcast on adapter' do
-      expect(event).to receive(:broadcast).with('user.created', user_id: 1)
+      expect(event.adapter).to receive(:broadcast).with('user.created', user_id: 1)
       event.broadcast('user.created', user_id: 1)
     end
   end
 
   describe '#subscribe' do
     it 'pushes subscriber to subscribers list' do
-      expect(event.adapter.subscribers.count).to eq 0
-      event.subscribe('event.name') { |payload| payload }
-      expect(event.adapter.subscribers.count).to eq 1
-      event.subscribe('event.name') { |payload| payload }
-      expect(event.adapter.subscribers.count).to eq 2
+      expect {
+        event.subscribe('event.name') { |payload| payload }
+      }.to change { event.adapter.subscribers.count }.by(1)
     end
   end
 end
