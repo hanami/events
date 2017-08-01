@@ -1,6 +1,6 @@
 require "hanami/events/adapter"
 require "hanami/events/base"
-require "hanami/events/listener"
+require "hanami/events/subscriber"
 require "hanami/events/version"
 
 module Hanami

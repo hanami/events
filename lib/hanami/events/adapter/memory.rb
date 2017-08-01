@@ -2,18 +2,20 @@ module Hanami
   module Events
     class Adapter
       class Memory
-        attr_reader :listeners
+        attr_reader :subscribers
 
         def initialize
-          @listeners = []
+          @subscribers = []
         end
 
-        def announce(event_name, payload)
-          @listeners.map { |listener| listener.call(event_name, payload) }
+        def broadcast(event_name, payload)
+          @subscribers.each do |subscriber|
+            subscriber.call(event_name, payload)
+          end
         end
 
-        def subscribe_pattern(event_name, &block)
-          @listeners << Listener.new(event_name, block)
+        def subscribe(event_name, &block)
+          @subscribers << Subscriber.new(event_name, block)
         end
       end
     end

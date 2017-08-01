@@ -1,22 +1,26 @@
 RSpec.describe Hanami::Events::Adapter::Memory do
   let(:adapter) { described_class.new }
 
-  describe '#subscribe_pattern' do
+  describe '#subscribe' do
     it 'pushes listener to listener list' do
-      expect(adapter.listeners.count).to eq 0
-      adapter.subscribe_pattern('event.name') { |payload| payload }
-      expect(adapter.listeners.count).to eq 1
-      adapter.subscribe_pattern('event.name') { |payload| payload }
-      expect(adapter.listeners.count).to eq 2
+      expect(adapter.subscribers.count).to eq 0
+      adapter.subscribe('event.name') { |payload| payload }
+      expect(adapter.subscribers.count).to eq 1
+      adapter.subscribe('event.name') { |payload| payload }
+      expect(adapter.subscribers.count).to eq 2
     end
   end
 
-  describe '#announce' do
+  describe '#broadcast' do
+    let(:subscriber) { double('subscriber') }
+
     before do
-      adapter.subscribe_pattern('user.created') { |payload| payload }
+      adapter.subscribe('user.created') { |payload| subscriber.call(payload) }
     end
 
-    it { expect(adapter.announce('user.created', user_id: 1)).to eq [{ user_id: 1 }] }
-    it { expect(adapter.announce('user.deleted', user_id: 1)).to eq [nil] }
+    it 'calls #call method with payload on subscriber' do
+      expect(subscriber).to receive(:call).with(user_id: 1)
+      adapter.broadcast('user.created', user_id: 1)
+    end
   end
 end
