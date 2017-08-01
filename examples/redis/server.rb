@@ -1,5 +1,3 @@
-# server
-
 require 'hanami/events'
 require 'redis'
 require 'connection_pool'
@@ -18,14 +16,3 @@ loop do
   sleep(1)
   puts $array.pop
 end
-
-# client
-
-require 'hanami/events'
-require 'redis'
-
-redis = Redis.new(host: 'localhost', port: 6379)
-events = Hanami::Events.build(:redis, redis: redis)
-
-events.broadcast('user.created', user_id: 1)
-events.broadcast('user.deleted', user_id: 1)
