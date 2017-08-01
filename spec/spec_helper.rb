@@ -1,3 +1,6 @@
+require 'simplecov'
+SimpleCov.start
+
 require 'hanami/events'
 
 RSpec.configure do |config|
