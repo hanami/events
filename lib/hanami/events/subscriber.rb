@@ -1,13 +1,13 @@
 module Hanami
   module Events
     class Subscriber
-      def initialize(pattern, block)
-        @pattern = pattern
-        @block = block
+      def initialize(pattern, event_handler)
+        @pattern_matcher = Matcher.new(pattern)
+        @event_handler = event_handler
       end
 
       def call(event_name, payload)
-        @block.call(payload) if @pattern == event_name
+        @event_handler.call(payload) if @pattern_matcher.match?(event_name)
       end
     end
   end

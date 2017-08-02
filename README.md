@@ -53,6 +53,26 @@ events.broadcast('user.created', user_id: 1)
 # => { user_id: 1 }
 ```
 
+#### Patterns
+* `*` - match all events
+* `user.*` - match all evensts started on `user.`
+* `*.created` - match all evensts ended on `.created`
+
+```ruby
+events = Hanami::Events.build(:memory)
+events.subscribe('*') { |payload| p 'all events' }
+events.subscribe('user.*') { |payload| p 'user events' }
+events.subscribe('*.created') { |payload| p 'something created' }
+
+events.broadcast('user.updated', user_id: 1)
+# => 'all events'
+# => 'user events'
+
+events.broadcast('post.created', user_id: 1)
+# => 'all events'
+# => 'something created'
+```
+
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/hanami/events.
