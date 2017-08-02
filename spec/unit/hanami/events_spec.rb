@@ -8,10 +8,10 @@ RSpec.describe Hanami::Events do
   end
 
   describe '#broadcast' do
-    let(:event_pattern) { 'user.created' }
+    let(:event_name) { 'user.created' }
 
     before do
-      event.subscribe(event_pattern) { |payload| payload }
+      event.subscribe(event_name) { |payload| payload }
     end
 
     it 'calls #broadcast on adapter' do

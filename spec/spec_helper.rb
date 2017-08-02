@@ -1,5 +1,5 @@
 require 'simplecov'
-SimpleCov.start
+SimpleCov.start { add_filter '/spec' }
 
 require 'hanami/events'
 
