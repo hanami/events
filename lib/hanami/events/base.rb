@@ -4,7 +4,7 @@ module Hanami
       attr_reader :adapter
 
       def initialize(adapter_name, options)
-        @adapter = Adapter.build(adapter_name, options)
+        @adapter = Adapter[adapter_name.to_sym].new(options)
       end
 
       def broadcast(event, **payload)

@@ -1,3 +1,4 @@
+require 'hanami/events/adapter/redis'
 require 'connection_pool'
 require 'redis'
 

@@ -1,3 +1,5 @@
+require 'support/fixtures'
+
 RSpec.describe Hanami::Events do
   let(:event) { Hanami::Events.build(:memory) }
 
@@ -26,5 +28,12 @@ RSpec.describe Hanami::Events do
         event.subscribe('event.name') { |payload| payload }
       }.to change { event.adapter.subscribers.count }.by(1)
     end
+  end
+
+  it 'allows add custom adapters' do
+    Hanami::Events::Adapter.register(:mock_adapter) { MockAdapter }
+
+    event = Hanami::Events.build(:mock_adapter)
+    expect(event.adapter).to be_a(MockAdapter)
   end
 end

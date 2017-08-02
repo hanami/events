@@ -1,3 +1,5 @@
+require 'hanami/events/adapter/memory'
+
 RSpec.describe Hanami::Events::Adapter::Memory do
   let(:adapter) { described_class.new }
 
