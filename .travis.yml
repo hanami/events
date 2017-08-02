@@ -1,7 +1,8 @@
 language: ruby
 sudo: false
 cache: bundler
-install: true
+install:
+  - bundle install
 rvm:
   - 2.3.4
   - 2.4.1
