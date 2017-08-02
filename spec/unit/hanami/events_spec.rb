@@ -20,6 +20,22 @@ RSpec.describe Hanami::Events do
     end
   end
 
+  describe '#subscribed_events' do
+    before do
+      event.subscribe('user.created') { |payload| payload }
+      event.subscribe('user.updated') { |payload| payload }
+      event.subscribe('user.deleted') { |payload| payload }
+    end
+
+    it 'returns list of all subscribed events' do
+      expect(event.subscribed_events).to eq([
+        { title: 'user.created' },
+        { title: 'user.updated' },
+        { title: 'user.deleted' }
+      ])
+    end
+  end
+
   describe '#subscribe' do
     it 'pushes subscriber to subscribers list' do
       expect {

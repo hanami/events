@@ -14,6 +14,10 @@ module Hanami
       def subscribe(event_name, &block)
         adapter.subscribe(event_name, &block)
       end
+
+      def subscribed_events
+        adapter.subscribers.map(&:meta)
+      end
     end
   end
 end

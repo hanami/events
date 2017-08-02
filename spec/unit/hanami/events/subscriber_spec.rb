@@ -31,4 +31,8 @@ RSpec.describe Hanami::Events::Subscriber do
       end
     end
   end
+
+  describe '#meta' do
+    it { expect(subscriber.meta).to eq(title: 'user.created') }
+  end
 end
