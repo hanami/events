@@ -2,7 +2,7 @@ RSpec.describe Hanami::Events::Adapter::Memory do
   let(:adapter) { described_class.new }
 
   describe '#subscribe' do
-    it 'pushes listener to listener list' do
+    it 'pushes subscriber to the list of subscribers' do
       expect {
         adapter.subscribe('event.name') { |payload| payload }
       }.to change { adapter.subscribers.count }.by(1)
