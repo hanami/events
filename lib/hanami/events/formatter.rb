@@ -9,6 +9,11 @@ module Hanami
         require_relative 'formatter/plain_text'
         PlainText
       end
+
+      register(:json) do
+        require_relative 'formatter/plain_text'
+        PlainText
+      end
     end
   end
 end
