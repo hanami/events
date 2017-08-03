@@ -4,7 +4,8 @@ module Hanami
       class Memory
         attr_reader :subscribers
 
-        def initialize(**)
+        def initialize(logger: nil, **)
+          @logger = logger
           @subscribers = []
         end
 
@@ -15,7 +16,7 @@ module Hanami
         end
 
         def subscribe(event_name, &block)
-          @subscribers << Subscriber.new(event_name, block)
+          @subscribers << Subscriber.new(event_name, block, @logger)
         end
       end
     end

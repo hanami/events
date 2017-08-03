@@ -1,3 +1,5 @@
+require 'logger'
+
 RSpec.describe Hanami::Events::Subscriber do
   let(:block) { proc { |payload| payload } }
   let(:subscriber) { described_class.new('user.created', block) }
@@ -28,6 +30,17 @@ RSpec.describe Hanami::Events::Subscriber do
     context 'when event name not matched' do
       it 'calls nothing' do
         expect(subscriber.call('user.deleted', user_id: 1)).to eq nil
+      end
+    end
+
+    context 'with logger' do
+      let(:block) { -> (payload) { logger.info('in event') } }
+      let(:logger) { Logger.new(StringIO.new) }
+      let(:subscriber) { described_class.new('user.created', block, logger) }
+
+      it 'calls logger' do
+        expect(logger).to receive(:info).with('in event')
+        subscriber.call('user.created', user_id: 1)
       end
     end
   end

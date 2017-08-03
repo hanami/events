@@ -10,6 +10,7 @@ module Hanami
 
         def initialize(params)
           @redis = params[:redis]
+          @logger = params[:logger]
           @subscribers = []
         end
 
@@ -18,7 +19,7 @@ module Hanami
         end
 
         def subscribe(event_name, &block)
-          @subscribers << Subscriber.new(event_name, block)
+          @subscribers << Subscriber.new(event_name, block, @logger)
 
           return if thread_spawned?
           thread_spawned!
