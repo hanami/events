@@ -1,4 +1,5 @@
 require "hanami/events/adapter"
+require "hanami/events/formatter"
 require "hanami/events/matcher"
 require "hanami/events/base"
 require "hanami/events/subscriber"

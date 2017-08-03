@@ -18,6 +18,10 @@ module Hanami
       def subscribed_events
         adapter.subscribers.map(&:meta)
       end
+
+      def format(type)
+        Formatter[type].new(subscribed_events).format
+      end
     end
   end
 end

@@ -46,6 +46,18 @@ RSpec.describe Hanami::Events do
     end
   end
 
+  describe '#format' do
+    before do
+      event.subscribe('user.created') { |payload| payload }
+      event.subscribe('user.updated') { |payload| payload }
+      event.subscribe('user.deleted') { |payload| payload }
+    end
+
+    it 'returns list of all subscribed events' do
+      expect(event.format(:json)).to eq "{\"events\":[{\"title\":\"user.created\"},{\"title\":\"user.updated\"},{\"title\":\"user.deleted\"}]}"
+    end
+  end
+
   it 'allows add custom adapters' do
     Hanami::Events::Adapter.register(:mock_adapter) { MockAdapter }
 

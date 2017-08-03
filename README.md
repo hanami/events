@@ -93,7 +93,21 @@ events.subscribe('*') { |payload| logger.info("Event: #{payload}" }
 
 events.broadcast('user.updated', user_id: 1)
 # => I, [2017-08-04T01:30:13.750700 #39778]  INFO -- : Event: { user_id: 1 }
+```
 
+### Formatters
+You can use different formatters for displaying information about all your events for event instance. Now hanami-events support:
+* plain text formatter
+* json formatter
+
+```ruby
+events.subscribe('*') { |payload| p 'all events' }
+events.subscribe('user.*') { |payload| p 'user events' }
+events.subscribe('*.created') { |payload| p 'something created' }
+
+require 'hanami/events/formatter'
+events.format(:json) # => JSON string with all events
+events.format(:plain_text)
 ```
 
 ## Contributing
