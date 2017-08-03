@@ -4,7 +4,7 @@ module Hanami
       class Memory
         attr_reader :subscribers
 
-        def initialize
+        def initialize(**)
           @subscribers = []
         end
 
