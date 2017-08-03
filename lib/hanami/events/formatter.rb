@@ -11,8 +11,8 @@ module Hanami
       end
 
       register(:json) do
-        require_relative 'formatter/plain_text'
-        PlainText
+        require_relative 'formatter/json'
+        Json
       end
     end
   end

@@ -1,5 +1,3 @@
-require 'dry/container'
-
 module Hanami
   module Events
     class Formatter
@@ -9,6 +7,13 @@ module Hanami
         end
 
         def format
+          "Events:\n#{formatted_events}"
+        end
+
+        private
+
+        def formatted_events
+          @data.map { |d| "\t#{d[:title].inspect}" }.join("\n")
         end
       end
     end
