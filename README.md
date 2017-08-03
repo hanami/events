@@ -82,6 +82,20 @@ events.broadcast('post.created', user_id: 1)
 # => 'something created'
 ```
 
+#### Logger
+You can use any loggers in your subscribe block. For this iunitialize events instance with logger and call `logger` in block:
+
+```ruby
+require 'logger'
+
+events = Hanami::Events.build(:memory, logger: Logger.new(StringIO.new))
+events.subscribe('*') { |payload| logger.info("Event: #{payload}" }
+
+events.broadcast('user.updated', user_id: 1)
+# => I, [2017-08-04T01:30:13.750700 #39778]  INFO -- : Event: { user_id: 1 }
+
+```
+
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/hanami/events.
