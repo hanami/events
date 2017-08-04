@@ -12,14 +12,12 @@ RSpec.describe Hanami::Events::Adapter::Memory do
   end
 
   describe '#broadcast' do
-    let(:subscriber) { double('subscriber') }
-
     before do
       adapter.subscribe('user.created') { |payload| subscriber.call(payload) }
     end
 
     it 'calls #call method with payload on subscriber' do
-      expect(subscriber).to receive(:call).with(user_id: 1)
+      expect(adapter.subscribers.first).to receive(:call).with('user.created', user_id: 1)
       adapter.broadcast('user.created', user_id: 1)
     end
   end
