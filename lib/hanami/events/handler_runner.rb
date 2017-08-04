@@ -3,13 +3,13 @@ module Hanami
     class HandlerRunner
       attr_reader :logger
 
-      def initialize(event_handler, logger)
-        @event_handler = event_handler
+      def initialize(handler, logger)
+        @handler = handler
         @logger = logger
       end
 
       def call(payload)
-        instance_exec(payload, &@event_handler)
+        instance_exec(payload, &@handler)
       end
     end
   end

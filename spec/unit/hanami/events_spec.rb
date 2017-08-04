@@ -31,9 +31,9 @@ RSpec.describe Hanami::Events do
 
     it 'returns list of all subscribed events' do
       expect(event.subscribed_events).to eq([
-        { title: 'user.created' },
-        { title: 'user.updated' },
-        { title: 'user.deleted' }
+        { name: 'user.created' },
+        { name: 'user.updated' },
+        { name: 'user.deleted' }
       ])
     end
   end
@@ -54,7 +54,7 @@ RSpec.describe Hanami::Events do
     end
 
     it 'returns list of all subscribed events' do
-      expect(event.format(:json)).to eq "{\"events\":[{\"title\":\"user.created\"},{\"title\":\"user.updated\"},{\"title\":\"user.deleted\"}]}"
+      expect(event.format(:json)).to eq "{\"events\":[{\"name\":\"user.created\"},{\"name\":\"user.updated\"},{\"name\":\"user.deleted\"}]}"
     end
   end
 
