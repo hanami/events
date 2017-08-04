@@ -96,7 +96,7 @@ events.broadcast('user.updated', user_id: 1)
 ```
 
 ### Formatters
-You can use different formatters for displaying information about all your events for event instance. Now hanami-events support:
+You can use different formatters for displaying list of registered events for event instance. Now hanami-events support:
 * plain text formatter
 * json formatter
 
@@ -108,6 +108,10 @@ events.subscribe('*.created') { |payload| p 'something created' }
 require 'hanami/events/formatter'
 events.format(:json) # => JSON string with all events
 events.format(:plain_text)
+# => Events:
+# =>         "user.created"
+# =>         "user.created"
+# =>         "user.deleted"
 ```
 
 ## Contributing
