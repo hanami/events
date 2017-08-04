@@ -1,6 +1,6 @@
 RSpec.describe Hanami::Events::Adapter do
   describe '.keys' do
-    it { expect(described_class.keys).to eq %w[memory redis] }
+    it { expect(described_class.keys).to include('memory', 'redis') }
   end
 
   describe '.[]' do
