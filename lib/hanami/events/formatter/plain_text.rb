@@ -2,8 +2,8 @@ module Hanami
   module Events
     class Formatter
       class PlainText
-        def initialize(data)
-          @data = data
+        def initialize(events_meta)
+          @events_meta = events_meta
         end
 
         def format
@@ -13,7 +13,7 @@ module Hanami
         private
 
         def formatted_events
-          @data.map { |d| "\t#{d[:title].inspect}" }.join("\n")
+          @events_meta.map { |e| "\t#{e[:name].inspect}" }.join("\n")
         end
       end
     end

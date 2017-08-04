@@ -4,11 +4,11 @@ RSpec.describe Hanami::Events::Formatter::PlainText do
   let(:formatter) { described_class.new(data) }
   let(:data) do
     [
-      { title: '*' },
-      { title: 'user.*' },
-      { title: 'user.created' },
-      { title: 'post.*' },
-      { title: 'post.created' },
+      { name: '*' },
+      { name: 'user.*' },
+      { name: 'user.created' },
+      { name: 'post.*' },
+      { name: 'post.created' },
     ]
   end
 

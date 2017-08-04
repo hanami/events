@@ -4,12 +4,12 @@ module Hanami
   module Events
     class Formatter
       class Json
-        def initialize(data)
-          @data = data
+        def initialize(events_meta)
+          @events_meta = events_meta
         end
 
         def format
-          { events: @data }.to_json
+          { events: @events_meta }.to_json
         end
       end
     end

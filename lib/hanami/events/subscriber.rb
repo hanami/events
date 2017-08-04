@@ -3,9 +3,9 @@ require 'hanami/events/handler_runner'
 module Hanami
   module Events
     class Subscriber
-      def initialize(pattern, event_handler, logger = nil)
-        @pattern = pattern
-        @pattern_matcher = Matcher.new(pattern)
+      def initialize(event_name, event_handler, logger = nil)
+        @event_name = event_name
+        @pattern_matcher = Matcher.new(event_name)
         @handler_runner = HandlerRunner.new(event_handler, logger)
       end
 
@@ -14,7 +14,7 @@ module Hanami
       end
 
       def meta
-        { title: @pattern }
+        { name: @event_name }
       end
     end
   end
