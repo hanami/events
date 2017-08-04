@@ -34,7 +34,7 @@ RSpec.describe Hanami::Events::Subscriber do
     end
 
     context 'with logger' do
-      let(:block) { -> (payload) { logger.info('in event') } }
+      let(:block) { -> (_payload) { logger.info('in event') } }
       let(:logger) { Logger.new(StringIO.new) }
       let(:subscriber) { described_class.new('user.created', block, logger) }
 
@@ -42,6 +42,13 @@ RSpec.describe Hanami::Events::Subscriber do
         expect(logger).to receive(:info).with('in event')
         subscriber.call('user.created', user_id: 1)
       end
+    end
+
+    context 'when handler try to call protected objects' do
+      let(:block) { -> (_payload) { meta } }
+      let(:subscriber) { described_class.new('user.created', block) }
+
+      it { expect { subscriber.call('user.created', user_id: 1) }.to raise_error }
     end
   end
 

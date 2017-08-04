@@ -83,7 +83,7 @@ events.broadcast('post.created', user_id: 1)
 ```
 
 #### Logger
-You can use any loggers in your subscribe block. For this iunitialize events instance with logger and call `logger` in block:
+You can use any loggers in your subscribe block. For this initialize events instance with logger and call `logger` in block:
 
 ```ruby
 require 'logger'
