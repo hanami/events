@@ -24,7 +24,7 @@ RSpec.describe Hanami::Events::Adapter::Redis do
   end
 
   describe '#broadcast' do
-    let(:redis) { Redis.new }
+    let(:redis) { ConnectionPool.new(size: 5, timeout: 5) { Redis.new } }
 
     it 'calls #broadcast method with proper params' do
       expect_any_instance_of(Redis).to receive(:publish).with(

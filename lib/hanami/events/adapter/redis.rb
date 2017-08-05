@@ -15,7 +15,9 @@ module Hanami
         end
 
         def broadcast(event_name, payload)
-          @redis.publish(CHANNEL, { event_name: event_name, **payload }.to_json)
+          @redis.with do |conn|
+            conn.publish(CHANNEL, { event_name: event_name, **payload }.to_json)
+          end
         end
 
         def subscribe(event_name, &block)
@@ -25,8 +27,8 @@ module Hanami
           thread_spawned!
 
           Thread.new do
-            @redis.with do |connection|
-              connection.subscribe(CHANNEL) do |on|
+            @redis.with do |conn|
+              conn.subscribe(CHANNEL) do |on|
                 on.message { |_, message| call_subscribers(JSON.parse(message)) }
               end
             end
