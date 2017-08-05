@@ -12,6 +12,7 @@ module Hanami
           @redis = params[:redis]
           @logger = params[:logger]
           @subscribers = []
+          @thread_spawned = false
         end
 
         def broadcast(event_name, payload)

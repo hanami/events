@@ -48,7 +48,7 @@ RSpec.describe Hanami::Events::Subscriber do
       let(:block) { -> (_payload) { meta } }
       let(:subscriber) { described_class.new('user.created', block) }
 
-      it { expect { subscriber.call('user.created', user_id: 1) }.to raise_error }
+      it { expect { subscriber.call('user.created', user_id: 1) }.to raise_error(NameError) }
     end
   end
 
