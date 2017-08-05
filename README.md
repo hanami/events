@@ -114,6 +114,10 @@ events.format(:plain_text)
 # =>         "user.deleted"
 ```
 
+## Examples
+
+* [Simple hanami app with hanami-events](https://github.com/davydovanton/hanami_event_example)
+
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/hanami/events.
