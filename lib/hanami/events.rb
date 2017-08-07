@@ -3,6 +3,7 @@ require "hanami/events/formatter"
 require "hanami/events/matcher"
 require "hanami/events/base"
 require "hanami/events/subscriber"
+require "hanami/events/mixin"
 require "hanami/events/version"
 
 # Events framework for Hanami
