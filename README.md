@@ -26,7 +26,7 @@ Hanami events support different adapters for sending events. Each adapter loads 
 Just initialize `Hanami::Event` instance with adapter:
 
 ```ruby
-Hanami::Events.build(:memory)
+Hanami::Events.initialize(:memory)
 ```
 
 #### Redis
@@ -34,7 +34,7 @@ Redis adapter works only with `ConnectionPool` gem. Hanami events uses redis `SU
 
 ```ruby
 redis = ConnectionPool.new(size: 5, timeout: 5) { Redis.new(host: 'localhost', port: 6379) }
-Hanami::Events.build(:redis, redis: redis)
+Hanami::Events.initialize(:redis, redis: redis)
 ```
 
 #### Custom Adapter
@@ -43,19 +43,19 @@ You can use your custom adapters. For this you need to create adapter class and 
 ```ruby
 Hanami::Events::Adapter.register(:kinesis) { Kinesis }
 
-event = Hanami::Events.build(:kinesis)
+event = Hanami::Events.initialize(:kinesis)
 # => event instance with your kinesis adapter
 ```
 
 ### Broadcaster
 ```ruby
-events = Hanami::Events.build(:memory)
+events = Hanami::Events.initialize(:memory)
 events.broadcast('user.created', user: user)
 ```
 
 ### Subscriber
 ```ruby
-events = Hanami::Events.build(:memory)
+events = Hanami::Events.initialize(:memory)
 events.subscribe('user.created') { |payload| p payload }
 
 events.broadcast('user.created', user_id: 1)
@@ -68,7 +68,7 @@ events.broadcast('user.created', user_id: 1)
 * `*.created` - match all evensts ended on `.created`
 
 ```ruby
-events = Hanami::Events.build(:memory)
+events = Hanami::Events.initialize(:memory)
 events.subscribe('*') { |payload| p 'all events' }
 events.subscribe('user.*') { |payload| p 'user events' }
 events.subscribe('*.created') { |payload| p 'something created' }
@@ -88,7 +88,7 @@ You can use any loggers in your subscribe block. For this initialize events inst
 ```ruby
 require 'logger'
 
-events = Hanami::Events.build(:memory, logger: Logger.new(StringIO.new))
+events = Hanami::Events.initialize(:memory, logger: Logger.new(StringIO.new))
 events.subscribe('*') { |payload| logger.info("Event: #{payload}" }
 
 events.broadcast('user.updated', user_id: 1)

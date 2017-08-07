@@ -12,7 +12,7 @@ require "hanami/events/version"
 # @see https://github.com/hanami/events
 module Hanami
   module Events
-    # Build event instance with selected adapter
+    # Initialize event instance with selected adapter
     #
     # @param adapter_name [Symbol] the adapter type
     # @param options [Hash] the configuration hash
@@ -21,13 +21,13 @@ module Hanami
     #
     # @example memory adapter
     #
-    #   Hanami::Events.build(:memory)
+    #   Hanami::Events.initialize(:memory)
     #
     # @example redis adapter
     #
     #   redis = ConnectionPool.new(size: 5, timeout: 5) { Redis.new(host: 'localhost', port: 6379) }
-    #   Hanami::Events.build(:redis, redis: redis)
-    def self.build(adapter_name, **options)
+    #   Hanami::Events.initialize(:redis, redis: redis)
+    def self.initialize(adapter_name, **options)
       Base.new(adapter_name, options)
     end
   end

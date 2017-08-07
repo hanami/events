@@ -3,7 +3,7 @@ require 'redis'
 require 'connection_pool'
 
 redis = ConnectionPool.new(size: 5, timeout: 5) { Redis.new(host: 'localhost', port: 6379) }
-events = Hanami::Events.build(:redis, redis: redis)
+events = Hanami::Events.initialize(:redis, redis: redis)
 
 $array = []
 
