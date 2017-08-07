@@ -13,12 +13,50 @@ RSpec.describe Hanami::Events::Adapter::Memory do
 
   describe '#broadcast' do
     before do
-      adapter.subscribe('user.created') { |payload| subscriber.call(payload) }
+      $user_array = []
+      adapter.subscribe('user.created') { |payload| $user_array << payload }
     end
 
     it 'calls #call method with payload on subscriber' do
-      expect(adapter.subscribers.first).to receive(:call).with('user.created', user_id: 1)
       adapter.broadcast('user.created', user_id: 1)
+      sleep 0.01
+      expect($user_array).to eq [{ user_id: 1 }]
+    end
+
+    context 'when subscribe have heavy calculation ' do
+      before do
+        $post_array = []
+
+        adapter.subscribe('post.created') do |payload|
+          sleep 1
+          $post_array << payload
+        end
+      end
+
+      it 'calls #call method with payload on subscriber' do
+        adapter.broadcast('post.created', user_id: 1)
+        expect($post_array).to eq []
+      end
+    end
+
+    context 'when system have 2 subscribes ' do
+      before do
+        $comment_array = []
+
+        adapter.subscribe('comment.created') do |payload|
+          $comment_array << payload
+        end
+
+        adapter.subscribe('comment.created') do |payload|
+          $comment_array << payload
+        end
+      end
+
+      it 'calls #call method with payload on subscriber' do
+        adapter.broadcast('comment.created', user_id: 1)
+        sleep 0.1
+        expect($comment_array).to eq [{ user_id: 1 }, { user_id: 1 }]
+      end
     end
   end
 end
