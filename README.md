@@ -22,11 +22,22 @@ Or install it yourself as:
 ### Adapters
 Hanami events support different adapters for sending events. Each adapter loads in memory only in hanami event initialization.
 
-####  Memory
+####  Memory Sync
 Just initialize `Hanami::Event` instance with adapter:
 
 ```ruby
-Hanami::Events.initialize(:memory)
+Hanami::Events.initialize(:memory_sync)
+```
+
+By default Memory adapter works in synchronous way.
+
+
+#### Memory Async
+
+Memory adapter works in separate thread. It allows subscribers to handle events in asynchronous manner.
+
+```ruby
+Hanami::Events.initialize(:memory_async)
 ```
 
 #### Redis
@@ -49,13 +60,13 @@ event = Hanami::Events.initialize(:kinesis)
 
 ### Broadcaster
 ```ruby
-events = Hanami::Events.initialize(:memory)
+events = Hanami::Events.initialize(:memory_sync)
 events.broadcast('user.created', user: user)
 ```
 
 ### Subscriber
 ```ruby
-events = Hanami::Events.initialize(:memory)
+events = Hanami::Events.initialize(:memory_sync)
 events.subscribe('user.created') { |payload| p payload }
 
 events.broadcast('user.created', user_id: 1)
@@ -68,7 +79,7 @@ events.broadcast('user.created', user_id: 1)
 * `*.created` - match all evensts ended on `.created`
 
 ```ruby
-events = Hanami::Events.initialize(:memory)
+events = Hanami::Events.initialize(:memory_sync)
 events.subscribe('*') { |payload| p 'all events' }
 events.subscribe('user.*') { |payload| p 'user events' }
 events.subscribe('*.created') { |payload| p 'something created' }
@@ -88,7 +99,7 @@ You can use any loggers in your subscribe block. For this initialize events inst
 ```ruby
 require 'logger'
 
-events = Hanami::Events.initialize(:memory, logger: Logger.new(StringIO.new))
+events = Hanami::Events.initialize(:memory_sync, logger: Logger.new(StringIO.new))
 events.subscribe('*') { |payload| logger.info("Event: #{payload}" }
 
 events.broadcast('user.updated', user_id: 1)

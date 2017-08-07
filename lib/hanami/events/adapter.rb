@@ -5,9 +5,14 @@ module Hanami
     class Adapter
       extend Dry::Container::Mixin
 
-      register(:memory) do
-        require_relative 'adapter/memory'
-        Memory
+      register(:memory_sync) do
+        require_relative 'adapter/memory_sync'
+        MemorySync
+      end
+
+      register(:memory_async) do
+        require_relative 'adapter/memory_async'
+        MemoryAsync
       end
 
       register(:redis) do

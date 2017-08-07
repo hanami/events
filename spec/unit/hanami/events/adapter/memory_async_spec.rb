@@ -1,6 +1,6 @@
-require 'hanami/events/adapter/memory'
+require 'hanami/events/adapter/memory_async'
 
-RSpec.describe Hanami::Events::Adapter::Memory do
+RSpec.describe Hanami::Events::Adapter::MemoryAsync do
   let(:adapter) { described_class.new }
 
   describe '#subscribe' do

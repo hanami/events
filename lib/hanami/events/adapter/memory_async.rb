@@ -1,7 +1,7 @@
 module Hanami
   module Events
     class Adapter
-      class Memory
+      class MemoryAsync
         attr_reader :subscribers
 
         def initialize(logger: nil, **)
