@@ -1,6 +1,6 @@
 require 'hanami/events'
 
-events = Hanami::Events.build(:memory)
+events = Hanami::Events.initialize(:memory)
 
 events.subscribe('user.created') { |payload| puts "Create user: #{payload}" }
 events.subscribe('user.created') { |payload| puts "Send notification to user: #{payload}" }
