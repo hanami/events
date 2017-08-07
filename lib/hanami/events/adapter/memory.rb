@@ -1,9 +1,9 @@
+require_relative 'base'
+
 module Hanami
   module Events
     class Adapter
-      class Memory
-        attr_reader :subscribers
-
+      class Memory < Base
         def initialize(logger: nil, **)
           @logger = logger
           @subscribers = []
@@ -14,25 +14,12 @@ module Hanami
           @event_queue << { name: event_name, payload: payload }
         end
 
-        def subscribe(event_name, &block)
-          @subscribers << Subscriber.new(event_name, block, @logger)
+        private
 
-          return if thread_spawned?
-          thread_spawned!
-
+        def spawn_thread!
           Thread.new do
             loop { call_subscribers }
           end
-        end
-
-        private
-
-        def thread_spawned?
-          @thread_spawned
-        end
-
-        def thread_spawned!
-          @thread_spawned = true
         end
 
         def call_subscribers

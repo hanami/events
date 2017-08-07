@@ -1,18 +1,16 @@
 require 'json'
+require_relative 'base'
 
 module Hanami
   module Events
     class Adapter
-      class Redis
+      class Redis < Base
         CHANNEL = 'hanami_events'
 
-        attr_reader :subscribers
-
-        def initialize(params)
-          @redis = params[:redis]
-          @logger = params[:logger]
+        def initialize(redis:, logger: nil, **params)
+          @logger = logger
+          @redis = redis
           @subscribers = []
-          @thread_spawned = false
         end
 
         def broadcast(event_name, payload)
@@ -21,12 +19,9 @@ module Hanami
           end
         end
 
-        def subscribe(event_name, &block)
-          @subscribers << Subscriber.new(event_name, block, @logger)
+        private
 
-          return if thread_spawned?
-          thread_spawned!
-
+        def spawn_thread!
           Thread.new do
             @redis.with do |conn|
               conn.subscribe(CHANNEL) do |on|
@@ -34,16 +29,6 @@ module Hanami
               end
             end
           end
-        end
-
-        private
-
-        def thread_spawned?
-          @thread_spawned
-        end
-
-        def thread_spawned!
-          @thread_spawned = true
         end
 
         def call_subscribers(payload)
