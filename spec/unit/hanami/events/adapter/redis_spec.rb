@@ -27,8 +27,8 @@ RSpec.describe Hanami::Events::Adapter::Redis do
     let(:redis) { ConnectionPool.new(size: 5, timeout: 5) { Redis.new } }
 
     it 'calls #broadcast method with proper params' do
-      expect_any_instance_of(Redis).to receive(:publish).with(
-        'hanami_events', { event_name: 'user.created', user_id: 1 }.to_json
+      expect_any_instance_of(Redis).to receive(:rpush).with(
+        'hanami_events', { event_name: 'user.created', payload: { user_id: 1 } }.to_json
       )
       adapter.broadcast('user.created', user_id: 1)
     end

@@ -4,7 +4,7 @@ module Hanami
   module Events
     class Adapter
       class Redis
-        CHANNEL = 'hanami_events'
+        STREAM_NAME = 'hanami_events'
 
         attr_reader :subscribers
 
@@ -17,7 +17,7 @@ module Hanami
 
         def broadcast(event_name, payload)
           @redis.with do |conn|
-            conn.publish(CHANNEL, { event_name: event_name, **payload }.to_json)
+            conn.rpush(STREAM_NAME, { event_name: event_name, payload: payload }.to_json)
           end
         end
 
@@ -28,9 +28,10 @@ module Hanami
           thread_spawned!
 
           Thread.new do
-            @redis.with do |conn|
-              conn.subscribe(CHANNEL) do |on|
-                on.message { |_, message| call_subscribers(JSON.parse(message)) }
+            loop do
+              @redis.with do |conn|
+                _, message = conn.blpop(STREAM_NAME)
+                call_subscribers(JSON.parse(message))
               end
             end
           end
@@ -46,9 +47,8 @@ module Hanami
           @thread_spawned = true
         end
 
-        def call_subscribers(payload)
-          event_name = payload.delete('event_name')
-          @subscribers.each { |subscriber| subscriber.call(event_name, payload) }
+        def call_subscribers(message)
+          @subscribers.each { |subscriber| subscriber.call(message['event_name'], message['payload']) }
         end
       end
     end
