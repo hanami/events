@@ -19,9 +19,13 @@ module Hanami
     #
     # @since x.x.x
     #
-    # @example memory adapter
+    # @example memory_sync adapter
     #
-    #   Hanami::Events.initialize(:memory)
+    #   Hanami::Events.initialize(:memory_sync)
+    #
+    # @example memory_async adapter
+    #
+    #   Hanami::Events.initialize(:memory_async)
     #
     # @example redis adapter
     #

@@ -3,7 +3,7 @@ module Hanami
     class Base
       attr_reader :adapter
 
-      def initialize(adapter_name, options)
+      def initialize(adapter_name, options = {})
         @adapter = Adapter[adapter_name.to_sym].new(options)
       end
 
