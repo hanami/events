@@ -1,7 +1,7 @@
 require 'hanami/events/adapter/memory_sync'
 
 RSpec.describe Hanami::Events::Base do
-  let(:event_bus) { described_class.new(:memory_sync) }
+  let(:event_bus) { described_class.new(:memory_sync, {}) }
   let(:handler) { Proc.new { |payload| payload } }
 
   describe 'broadcast' do

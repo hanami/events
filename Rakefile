@@ -14,6 +14,10 @@ namespace :spec do
     ENV["COVERAGE"] = "true"
     Rake::Task["spec:unit"].invoke
   end
+
+  task :mutant do
+    system("mutant --include lib --require 'hanami/events' --use rspec Hanami::Events")
+  end
 end
 
 task default: "spec:unit"
