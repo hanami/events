@@ -73,6 +73,26 @@ events.broadcast('user.created', user_id: 1)
 # => { user_id: 1 }
 ```
 
+### Mixin
+There is a mixin that allows to subscribe to events from class.
+
+Example:
+```ruby
+$events = Hanami::Events.initialize(:memory)
+
+class WelcomeMailer
+  include Hanami::Events::Mixin
+
+  subscribe_to $events, 'user.created'
+
+  def call(payload)
+    # send email
+  end
+end
+```
+
+`$events.broadcast('user.created', user_i: 1)` would trigger `WelcomeMailer#call` with `user_id: 1` as a payload.
+
 #### Patterns
 * `*` - match all events
 * `user.*` - match all evensts started on `user.`
