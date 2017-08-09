@@ -6,12 +6,12 @@ require "hanami/events/subscriber"
 require "hanami/events/mixin"
 require "hanami/events/version"
 
-# Events framework for Hanami
-#
-# @since x.x.x
-#
-# @see https://github.com/hanami/events
 module Hanami
+  # Events framework for Hanami
+  #
+  # @since x.x.x
+  #
+  # @see https://github.com/hanami/events
   module Events
     # Initialize event instance with selected adapter
     #
