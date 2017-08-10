@@ -5,7 +5,8 @@ module Hanami
   module Events
     class Adapter
       class Redis
-        STREAM_NAME = 'hanami_events'
+        STREAM_NAME = 'hanami.events'
+        EVENT_STORE = 'hanami.event_store'
 
         attr_reader :subscribers
 
@@ -18,7 +19,7 @@ module Hanami
 
         def broadcast(event_name, payload)
           @redis.with do |conn|
-            conn.rpush(STREAM_NAME, {
+            conn.lpush(STREAM_NAME, {
               id: SecureRandom.uuid,
               event_name: event_name,
               payload: payload
@@ -35,7 +36,7 @@ module Hanami
           Thread.new do
             loop do
               @redis.with do |conn|
-                _, message = conn.blpop(STREAM_NAME)
+                message = conn.brpoplpush(STREAM_NAME, EVENT_STORE)
                 call_subscribers(JSON.parse(message))
               end
             end
