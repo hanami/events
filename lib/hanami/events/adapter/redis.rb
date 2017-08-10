@@ -1,4 +1,5 @@
 require 'json'
+require 'securerandom'
 
 module Hanami
   module Events
@@ -17,7 +18,11 @@ module Hanami
 
         def broadcast(event_name, payload)
           @redis.with do |conn|
-            conn.rpush(STREAM_NAME, { event_name: event_name, payload: payload }.to_json)
+            conn.rpush(STREAM_NAME, {
+              id: SecureRandom.uuid,
+              event_name: event_name,
+              payload: payload
+            }.to_json)
           end
         end
 
