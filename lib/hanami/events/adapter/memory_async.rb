@@ -1,3 +1,5 @@
+require 'securerandom'
+
 module Hanami
   module Events
     class Adapter
@@ -11,7 +13,7 @@ module Hanami
         end
 
         def broadcast(event_name, payload)
-          @event_queue << { name: event_name, payload: payload }
+          @event_queue << { id: SecureRandom.uuid, name: event_name, payload: payload }
         end
 
         def subscribe(event_name, &block)
