@@ -11,7 +11,7 @@ module Hanami
         attr_reader :subscribers
 
         def initialize(params)
-          @redis = params[:redis]
+          @redis = with_connection_pool(params[:redis])
           @logger = params[:logger]
           @subscribers = []
           @thread_spawned = false
@@ -55,6 +55,13 @@ module Hanami
 
         def call_subscribers(message)
           @subscribers.each { |subscriber| subscriber.call(message['event_name'], message['payload']) }
+        end
+
+        def with_connection_pool(redis)
+          return redis if redis.is_a?(ConnectionPool)
+          raise ArgumentError, 'Please, provide an instance of Redis' unless redis.is_a?(::Redis)
+
+          ConnectionPool.new(size: 5, timeout: 5) { redis }
         end
       end
     end
