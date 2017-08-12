@@ -48,6 +48,9 @@ redis = ConnectionPool.new(size: 5, timeout: 5) { Redis.new(host: 'localhost', p
 Hanami::Events.initialize(:redis, redis: redis)
 ```
 
+If you pass just a Redis instance, `Hanami::Events` will wrap this instance into `ConnectionPool` anyways.
+Default params will be used: `ConnectionPool.new(size: 5, timeout: 5) { redis }`
+
 #### Custom Adapter
 You can use your custom adapters. For this you need to create adapter class and register it in `Hanami::Event::Adapter` class:
 
