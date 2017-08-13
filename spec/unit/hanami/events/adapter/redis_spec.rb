@@ -23,6 +23,30 @@ RSpec.describe Hanami::Events::Adapter::Redis do
         expect { described_class.new(redis: nil) }.to raise_error(ArgumentError)
       end
     end
+
+    context 'accepts stream param' do
+      let(:event) do
+        {
+          id: 'abcd1234', event_name: 'user.created', payload: { user_id: 1 }
+        }.to_json
+      end
+
+      it 'uses hanami.events as default stream' do
+        expect_any_instance_of(Redis).to(
+          receive(:lpush).with('hanami.events', event)
+        )
+        adapter.broadcast('user.created', user_id: 1)
+      end
+
+      it 'uses stream param when passed' do
+        adapter = described_class.new(redis: redis, stream: 'custom.stream')
+
+        expect_any_instance_of(Redis).to(
+          receive(:lpush).with('custom.stream', event)
+        )
+        adapter.broadcast('user.created', user_id: 1)
+      end
+    end
   end
 
   describe '#subscribe' do

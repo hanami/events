@@ -51,6 +51,14 @@ Hanami::Events.initialize(:redis, redis: redis)
 If you pass just a Redis instance, `Hanami::Events` will wrap this instance into `ConnectionPool` anyways.
 Default params will be used: `ConnectionPool.new(size: 5, timeout: 5) { redis }`
 
+There is a way to define a stream name for Redis by passing `stream` param to initialize:
+
+```ruby
+Hanami::Events.initialize(:redis, redis: redis, stream: 'hanami.events')
+```
+
+Default stream name is `hanami.events`
+
 #### Custom Adapter
 You can use your custom adapters. For this you need to create adapter class and register it in `Hanami::Event::Adapter` class:
 
