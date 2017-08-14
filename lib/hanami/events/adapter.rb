@@ -2,6 +2,11 @@ require 'dry/container'
 
 module Hanami
   module Events
+    # Adapter factory class.
+    #
+    # @since x.x.x
+    #
+    # @api private
     class Adapter
       extend Dry::Container::Mixin
 
