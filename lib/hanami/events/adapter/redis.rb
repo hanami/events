@@ -4,6 +4,11 @@ require 'securerandom'
 module Hanami
   module Events
     class Adapter
+      # Redis Adapter
+      #
+      # @since x.x.x
+      #
+      # @api private
       class Redis
         DEFAULT_STREAM = 'hanami.events'
         EVENT_STORE = 'hanami.event_store'
@@ -18,6 +23,12 @@ module Hanami
           @thread_spawned = false
         end
 
+        # Brodcasts event to all subscribes
+        #
+        # @param event [Symbol, String] the event name
+        # @param payload [Hash] the event data
+        #
+        # @since x.x.x
         def broadcast(event_name, payload)
           @redis.with do |conn|
             conn.lpush(@stream, {
@@ -28,6 +39,12 @@ module Hanami
           end
         end
 
+        # Subscribes block for selected event
+        #
+        # @param event_name [Symbol, String] the event name
+        # @param block [Block] to execute when event is broadcasted
+        #
+        # @since x.x.x
         def subscribe(event_name, &block)
           @subscribers << Subscriber.new(event_name, block, @logger)
 
