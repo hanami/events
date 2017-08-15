@@ -41,7 +41,7 @@ Hanami::Events.initialize(:memory_async)
 ```
 
 #### Redis
-Redis adapter works only with `ConnectionPool` gem. Hanami events uses redis `SUBSCRIBE` under the hood.
+Redis adapter works only with `ConnectionPool` gem. Hanami events uses redis `BRPOPLPUSH` under the hood. It's mean that all your events will save in redis. Be careful!
 
 ```ruby
 redis = ConnectionPool.new(size: 5, timeout: 5) { Redis.new(host: 'localhost', port: 6379) }
