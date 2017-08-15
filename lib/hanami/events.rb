@@ -9,7 +9,7 @@ require "hanami/events/version"
 module Hanami
   # Events framework for Hanami
   #
-  # @since x.x.x
+  # @since 0.1.0
   #
   # @see https://github.com/hanami/events
   module Events
@@ -18,7 +18,7 @@ module Hanami
     # @param adapter_name [Symbol] the adapter type
     # @param options [Hash] the configuration hash
     #
-    # @since x.x.x
+    # @since 0.1.0
     #
     # @example memory_sync adapter
     #

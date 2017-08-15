@@ -3,7 +3,7 @@ module Hanami
     class Adapter
       # Synchronous Memory Adapter
       #
-      # @since x.x.x
+      # @since 0.1.0
       #
       # @api private
       class MemorySync
@@ -19,7 +19,7 @@ module Hanami
         # @param event [Symbol, String] the event name
         # @param payload [Hash] the event data
         #
-        # @since x.x.x
+        # @since 0.1.0
         def broadcast(event_name, payload)
           @subscribers.each do |subscriber|
             subscriber.call(event_name, payload)
@@ -31,7 +31,7 @@ module Hanami
         # @param event_name [Symbol, String] the event name
         # @param block [Block] to execute when event is broadcasted
         #
-        # @since x.x.x
+        # @since 0.1.0
         def subscribe(event_name, &block)
           @subscribers << Subscriber.new(event_name, block, @logger)
         end

@@ -4,7 +4,7 @@ module Hanami
   module Events
     # Formatter for subscribed events.
     #
-    # @since x.x.x
+    # @since 0.1.0
     #
     # @api private
     class Formatter

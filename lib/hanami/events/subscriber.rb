@@ -2,11 +2,11 @@ module Hanami
   module Events
     # Subscriber class for calling subscriber blocks
     #
-    # @since x.x.x
+    # @since 0.1.0
     #
     # @api private
     class Subscriber
-      # @since x.x.x
+      # @since 0.1.0
       #
       # @api private
       class Runner
@@ -33,7 +33,7 @@ module Hanami
       # @param event_name [String] the event name
       # @param payload [Hash] the payload
       #
-      # @since x.x.x
+      # @since 0.1.0
       #
       # @api private
       def call(event_name, payload)
@@ -42,7 +42,7 @@ module Hanami
 
       # Returns meta information for subscriber
       #
-      # @since x.x.x
+      # @since 0.1.0
       #
       # @api private
       def meta

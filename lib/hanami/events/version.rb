@@ -1,7 +1,7 @@
 module Hanami
   module Events
-    # @since x.x.x
+    # @since 0.1.0
     # @api private
-    VERSION = "0.0.0".freeze
+    VERSION = "0.1.0".freeze
   end
 end

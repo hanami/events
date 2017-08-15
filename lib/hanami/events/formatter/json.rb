@@ -5,7 +5,7 @@ module Hanami
     class Formatter
       # JSON formatter for subscribed events.
       #
-      # @since x.x.x
+      # @since 0.1.0
       #
       # @api private
       class Json
@@ -14,13 +14,13 @@ module Hanami
           #
           # @param events_meta [Hash] events meta data
           #
-          # @since x.x.x
+          # @since 0.1.0
           @events_meta = events_meta
         end
 
         # Returns events meta data in json format
         #
-        # @since x.x.x
+        # @since 0.1.0
         def format
           { events: @events_meta }.to_json
         end

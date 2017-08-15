@@ -7,7 +7,7 @@ module Hanami
     # user.*    - match all evensts started on user.
     # *.created - match all evensts ended on .created
     #
-    # @since x.x.x
+    # @since 0.1.0
     #
     # @api private
     class Matcher

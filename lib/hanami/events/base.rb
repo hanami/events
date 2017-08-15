@@ -2,7 +2,7 @@ module Hanami
   module Events
     # Base event class with public methods
     #
-    # @since x.x.x
+    # @since 0.1.0
     #
     # @api public
     class Base
@@ -17,7 +17,7 @@ module Hanami
       # @param event [Symbol, String] the event name
       # @param payload [Hash] the event data
       #
-      # @since x.x.x
+      # @since 0.1.0
       def broadcast(event, **payload)
         adapter.broadcast(event, payload)
       end
@@ -26,14 +26,14 @@ module Hanami
       #
       # @param event_name [Symbol, String] the event name
       #
-      # @since x.x.x
+      # @since 0.1.0
       def subscribe(event_name, &block)
         adapter.subscribe(event_name, &block)
       end
 
       # Returns all events subscribed for current instance
       #
-      # @since x.x.x
+      # @since 0.1.0
       def subscribed_events
         adapter.subscribers.map(&:meta)
       end
@@ -42,7 +42,7 @@ module Hanami
       #
       # @param type [Symbol] the format type
       #
-      # @since x.x.x
+      # @since 0.1.0
       def format(type)
         Formatter[type].new(subscribed_events).format
       end

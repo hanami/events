@@ -4,7 +4,7 @@ module Hanami
   module Events
     # Adapter factory class.
     #
-    # @since x.x.x
+    # @since 0.1.0
     #
     # @api private
     class Adapter

@@ -15,7 +15,7 @@ module Hanami
     #   end
     # end
     #
-    # @since x.x.x
+    # @since 0.1.0
     #
     # @api public
     module Mixin
