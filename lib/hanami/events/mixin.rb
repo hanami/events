@@ -1,5 +1,23 @@
 module Hanami
   module Events
+    # Mixin that extends class by `subscribe_to` method.
+    #
+    # @example
+    # $events = Hanami::Events.initialize(:memory)
+    #
+    # class WelcomeMailer
+    #   include Hanami::Events::Mixin
+    #
+    #   subscribe_to $events, 'user.created'
+    #
+    #   def call(payload)
+    #     # send email
+    #   end
+    # end
+    #
+    # @since x.x.x
+    #
+    # @api public
     module Mixin
       def self.included(klass)
         klass.extend(ClassMethods)

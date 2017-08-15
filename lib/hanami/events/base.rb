@@ -22,7 +22,7 @@ module Hanami
         adapter.broadcast(event, payload)
       end
 
-      # Calls subscribes for selecterd adapter
+      # Calls subscribes for selected adapter
       #
       # @param event_name [Symbol, String] the event name
       #

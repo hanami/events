@@ -1,5 +1,15 @@
 module Hanami
   module Events
+    # Matcher for event names.
+    #
+    # Allows to match event names as patterns:
+    # *         - match all events
+    # user.*    - match all evensts started on user.
+    # *.created - match all evensts ended on .created
+    #
+    # @since x.x.x
+    #
+    # @api private
     class Matcher
       MATCH_ALL_CHARS = '.*'
       RANGE_PATTERN = '*'

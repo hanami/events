@@ -2,6 +2,11 @@ require 'dry/container'
 
 module Hanami
   module Events
+    # Formatter for subscribed events.
+    #
+    # @since x.x.x
+    #
+    # @api private
     class Formatter
       extend Dry::Container::Mixin
 
