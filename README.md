@@ -23,7 +23,9 @@ Or install it yourself as:
 Hanami events support different adapters for sending events. Each adapter loads in memory only in hanami event initialization.
 
 ####  Memory Sync
+
 Just initialize `Hanami::Event` instance with adapter:
+**Important:** Memory adapter save nothing. Be careful! Use it only for testing.
 
 ```ruby
 Hanami::Events.initialize(:memory_sync)
@@ -35,6 +37,7 @@ By default Memory adapter works in synchronous way.
 #### Memory Async
 
 Memory adapter works in separate thread. It allows subscribers to handle events in asynchronous manner.
+**Important:** Memory adapter save nothing. Be careful! Use it only for testing.
 
 ```ruby
 Hanami::Events.initialize(:memory_async)
