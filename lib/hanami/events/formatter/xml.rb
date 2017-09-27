@@ -9,12 +9,12 @@ module Hanami
       #
       # @api private
       class Xml
+        # Accepts meta data of subscribed events
+        #
+        # @param events_meta [Hash] events meta data
+        #
+        # @since 0.1.0
         def initialize(events_meta)
-          # Accepts meta data of subscribed events
-          #
-          # @param events_meta [Hash] events meta data
-          #
-          # @since 0.1.0
           @events_meta = events_meta
         end
 
