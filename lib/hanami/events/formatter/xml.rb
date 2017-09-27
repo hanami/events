@@ -22,7 +22,7 @@ module Hanami
         #
         # @since 0.1.0
         def format
-          XmlSimple.xml_out({ events: @events_meta })
+          XmlSimple.xml_out(events: @events_meta)
         end
       end
     end
