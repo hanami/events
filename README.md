@@ -144,6 +144,7 @@ events.broadcast('user.updated', user_id: 1)
 You can use different formatters for displaying list of registered events for event instance. Now hanami-events support:
 * plain text formatter
 * json formatter
+* xml formatter (**require [xml-simple](https://github.com/maik/xml-simple) gem**)
 
 ```ruby
 events.subscribe('*') { |payload| p 'all events' }
