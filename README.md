@@ -152,6 +152,7 @@ events.subscribe('*.created') { |payload| p 'something created' }
 
 require 'hanami/events/formatter'
 events.format(:json) # => JSON string with all events
+events.format(:xml)  # => XML string with all events 
 events.format(:plain_text)
 # => Events:
 # =>         "user.created"

@@ -24,6 +24,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_dependency "dry-container", "~> 0.6"
+  spec.add_dependency "xml-simple"
 
   spec.add_development_dependency "redis"
   spec.add_development_dependency "connection_pool"
