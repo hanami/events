@@ -9,7 +9,8 @@ rvm:
   - jruby-9.1.8.0
   - jruby-head
   - ruby-head
-
+script:
+  - bundle exec rubocop
 matrix:
   allow_failures:
     - rvm: ruby-head
