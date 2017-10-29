@@ -25,16 +25,15 @@ module Hanami
 
         # Brodcasts event to all subscribes
         #
-        # @param event [Symbol, String] the event name
-        # @param payload [Hash] the event data
+        # @param event
         #
         # @since 0.1.0
-        def broadcast(event_name, payload)
+        def broadcast(event)
           @redis.with do |conn|
             conn.lpush(@stream, {
               id: SecureRandom.uuid,
-              event_name: event_name,
-              payload: payload
+              class: event.class,
+              attributes: event.to_h
             }.to_json)
           end
         end
@@ -55,7 +54,12 @@ module Hanami
             loop do
               @redis.with do |conn|
                 message = conn.brpoplpush(@stream, EVENT_STORE)
-                call_subscribers(JSON.parse(message))
+                event_attributes = JSON.parse(message)
+
+                event_class = Module.const_get("::#{event_attributes["class"]}")
+                attributes = symbolize_keys(event_attributes["attributes"])
+
+                call_subscribers(event_class.new(attributes))
               end
             end
           end
@@ -71,8 +75,8 @@ module Hanami
           @thread_spawned = true
         end
 
-        def call_subscribers(message)
-          @subscribers.each { |subscriber| subscriber.call(message['event_name'], message['payload']) }
+        def call_subscribers(event)
+          @subscribers.each { |subscriber| subscriber.call(event) }
         end
 
         def with_connection_pool(redis)
@@ -80,6 +84,10 @@ module Hanami
           raise ArgumentError, 'Please, provide an instance of Redis' unless redis.is_a?(::Redis)
 
           ConnectionPool.new(size: 5, timeout: 5) { redis }
+        end
+
+        def symbolize_keys(attributes)
+          attributes.each_with_object({}) { |(k, v), hash| hash[k.to_sym] = v }
         end
       end
     end

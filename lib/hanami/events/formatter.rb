@@ -19,7 +19,7 @@ module Hanami
         require_relative 'formatter/json'
         Json
       end
-      
+
       register(:xml) do
         require_relative 'formatter/xml'
         Xml

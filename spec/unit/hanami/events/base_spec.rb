@@ -2,14 +2,15 @@ require 'hanami/events/adapter/memory_sync'
 
 RSpec.describe Hanami::Events::Base do
   let(:event_bus) { described_class.new(:memory_sync, {}) }
-  let(:handler) { Proc.new { |payload| payload } }
+  let(:event) { double('user_created') }
+  let(:handler) { Proc.new { |event| event } }
 
   describe 'broadcast' do
     it 'calls broadcast on adapter' do
       expect_any_instance_of(Hanami::Events::Adapter::MemorySync).to(
-        receive(:broadcast).with('user.created', user_id: 1)
+        receive(:broadcast).with(event)
       )
-      event_bus.broadcast('user.created', user_id: 1)
+      event_bus.broadcast(event)
     end
   end
 

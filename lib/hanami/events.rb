@@ -1,3 +1,4 @@
+require "dry-struct"
 require "hanami/events/adapter"
 require "hanami/events/formatter"
 require "hanami/events/matcher"
@@ -7,6 +8,23 @@ require "hanami/events/mixin"
 require "hanami/events/version"
 
 module Hanami
+  module Types
+    include ::Dry::Types.module
+    UUID = String.constrained(format: /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/)
+  end
+
+  module Event
+    class Type < Dry::Struct
+      def self.event_name(name)
+        @event_name = name
+      end
+
+      def event_name
+        self.class.instance_variable_get(:@event_name)
+      end
+    end
+  end
+
   # Events framework for Hanami
   #
   # @since 0.1.0
