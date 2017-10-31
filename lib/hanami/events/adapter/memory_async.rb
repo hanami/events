@@ -19,12 +19,11 @@ module Hanami
 
         # Brodcasts event to all subscribes
         #
-        # @param event [Symbol, String] the event name
-        # @param payload [Hash] the event data
+        # @param event
         #
         # @since 0.1.0
-        def broadcast(event_name, payload)
-          @event_queue << { id: SecureRandom.uuid, name: event_name, payload: payload }
+        def broadcast(event)
+          @event_queue << event
         end
 
         # Subscribes block for selected event
@@ -57,9 +56,7 @@ module Hanami
         def call_subscribers
           event = @event_queue.pop
 
-          @subscribers.each do |subscriber|
-            subscriber.call(event[:name], event[:payload])
-          end
+          @subscribers.each { |subscriber| subscriber.call(event) }
         end
       end
     end

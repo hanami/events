@@ -17,8 +17,8 @@ module Hanami
           @logger = logger
         end
 
-        def call(payload)
-          instance_exec(payload, &@handler)
+        def call(event)
+          instance_exec(event, &@handler)
         end
       end
 
@@ -36,8 +36,8 @@ module Hanami
       # @since 0.1.0
       #
       # @api private
-      def call(event_name, payload)
-        @runner.(payload) if @pattern_matcher.match?(event_name)
+      def call(event)
+        @runner.(event) if @pattern_matcher.match?(event.event_name)
       end
 
       # Returns meta information for subscriber

@@ -16,14 +16,11 @@ module Hanami
 
         # Brodcasts event to all subscribes
         #
-        # @param event [Symbol, String] the event name
-        # @param payload [Hash] the event data
+        # @param event
         #
         # @since 0.1.0
-        def broadcast(event_name, payload)
-          @subscribers.each do |subscriber|
-            subscriber.call(event_name, payload)
-          end
+        def broadcast(event)
+          @subscribers.each { |subscriber| subscriber.call(event) }
         end
 
         # Subscribes block for selected event

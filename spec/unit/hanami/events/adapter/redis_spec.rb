@@ -3,7 +3,13 @@ require 'connection_pool'
 require 'redis'
 
 RSpec.describe Hanami::Events::Adapter::Redis do
-  let(:handler) { proc { |payload| payload } }
+  class DummyEvent < Hanami::Event::Type
+    event_name 'dummy.event'
+
+    attribute :name, Hanami::Types::String
+  end
+
+  let(:handler) { proc { |event| event } }
   let(:adapter) { described_class.new(redis: redis) }
 
   before do
@@ -15,7 +21,7 @@ RSpec.describe Hanami::Events::Adapter::Redis do
 
     it 'wraps redis instance into connection pool' do
       expect_any_instance_of(ConnectionPool).to receive(:with)
-      adapter.broadcast('user.created', user_id: 1)
+      adapter.broadcast(DummyEvent.new(name: 'Phil'))
     end
 
     context 'without redis in params' do
@@ -27,7 +33,9 @@ RSpec.describe Hanami::Events::Adapter::Redis do
     context 'accepts stream param' do
       let(:event) do
         {
-          id: 'abcd1234', event_name: 'user.created', payload: { user_id: 1 }
+          id: 'abcd1234',
+          class: 'DummyEvent',
+          attributes: { name: 'Phil' }
         }.to_json
       end
 
@@ -35,7 +43,7 @@ RSpec.describe Hanami::Events::Adapter::Redis do
         expect_any_instance_of(Redis).to(
           receive(:lpush).with('hanami.events', event)
         )
-        adapter.broadcast('user.created', user_id: 1)
+        adapter.broadcast(DummyEvent.new(name: 'Phil'))
       end
 
       it 'uses stream param when passed' do
@@ -44,7 +52,7 @@ RSpec.describe Hanami::Events::Adapter::Redis do
         expect_any_instance_of(Redis).to(
           receive(:lpush).with('custom.stream', event)
         )
-        adapter.broadcast('user.created', user_id: 1)
+        adapter.broadcast(DummyEvent.new(name: 'Phil'))
       end
     end
   end
@@ -62,21 +70,21 @@ RSpec.describe Hanami::Events::Adapter::Redis do
     it 'spawns just one thread' do
       expect(Thread).to receive(:new).once
 
-      adapter.subscribe('user.created', &handler)
-      adapter.subscribe('user.updated', &handler)
+      adapter.subscribe('dummy.event', &handler)
+      adapter.subscribe('dummy.event', &handler)
     end
 
     context do
       let(:events) { redis.with { |conn| conn.lrange(described_class::EVENT_STORE, 0, -1) } }
 
       before do
-        adapter.subscribe('user.created', &handler)
-        adapter.broadcast('user.created', user_id: 1)
+        adapter.subscribe('dummy.event', &handler)
+        adapter.broadcast(DummyEvent.new(name: 'Phil'))
       end
 
       it 'saves event to event store' do
         sleep 0.1
-        expect(events).to eq ['{"id":"abcd1234","event_name":"user.created","payload":{"user_id":1}}']
+        expect(events).to eq ['{"id":"abcd1234","class":"DummyEvent","attributes":{"name":"Phil"}}']
       end
     end
   end
@@ -87,9 +95,9 @@ RSpec.describe Hanami::Events::Adapter::Redis do
 
     it 'calls redis with proper params' do
       expect_any_instance_of(Redis).to receive(:lpush).with(
-        'hanami.events', { id: 'abcd1234', event_name: 'user.created', payload: { user_id: 1 } }.to_json
+        'hanami.events', { id: 'abcd1234', class: 'DummyEvent', attributes: { name: "Phil" } }.to_json
       )
-      adapter.broadcast('user.created', user_id: 1)
+      adapter.broadcast(DummyEvent.new(name: 'Phil'))
     end
   end
 end
