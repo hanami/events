@@ -8,10 +8,10 @@ module Hanami
         attr_reader :subscribers
 
         def initialize(params)
-          @postgres = with_connection_pool(params[:postgres])
+          @postgres = check_for params[:postgres]
           @logger = params[:logger]
-          @subscribers = []
           @tread_spawned = false
+          @subscribers = []
         end
 
         # Brodcasts event to all subscribes
@@ -21,9 +21,7 @@ module Hanami
         def broadcast(event_name, payload)
           payload = payload.to_json
 
-          @postgres.with do |conn|
-            conn.async_exec("NOTIFY \"#{conn.escape_string(event_name)}\", '#{payload}'")
-          end
+          @postgres.async_exec("NOTIFY \"#{@postgres.escape_string(event_name)}\", '#{payload}'")
         end
 
         # Subscribes block for selected channel
@@ -37,19 +35,17 @@ module Hanami
           thread_spawned!
 
           Thread.new do
-            @postgres.with do |conn|
-              begin
-                conn.async_exec "LISTEN \"#{conn.escape_string(event_name)}\""
+            begin
+              conn.async_exec "LISTEN \"#{conn.escape_string(event_name)}\""
 
-                loop do
-                  conn.wait_for_notify do |event, _pid, payload|
-                    @subscribers.each { |subscriber| subscriber.call(event, JSON.parse(payload)) }
-                  end
+              loop do
+                @postgres.wait_for_notify do |event, _pid, payload|
+                  @subscribers.each { |subscriber| subscriber.call(event, JSON.parse(payload)) }
                 end
-
-              ensure
-                conn.async_exec "UNLISTEN *"
               end
+
+            ensure
+              conn.async_exec "UNLISTEN *"
             end
           end
         end
@@ -64,11 +60,9 @@ module Hanami
           @thread_spawned = true
         end
 
-        def with_connection_pool(postgres)
-          return postgres if postgres.is_a? ConnectionPool
+        def check_for(postgres)
           raise ArgumentError, 'Please, provide a PG connection' unless postgres.is_a? PG::Connection
-
-          ConnectionPool.new(size: 5, timeout: 5) { postgres }
+          postgres
         end
       end
     end
