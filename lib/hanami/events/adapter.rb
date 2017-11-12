@@ -24,6 +24,11 @@ module Hanami
         require_relative 'adapter/redis'
         Redis
       end
+
+      register(:postgres) do
+        require_relative 'adapter/postgres'
+        Postgres
+      end
     end
   end
 end
