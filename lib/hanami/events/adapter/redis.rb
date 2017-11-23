@@ -21,6 +21,7 @@ module Hanami
           @subscribers = []
           @stream = params.fetch(:stream, DEFAULT_STREAM)
           @thread_spawned = false
+          @serializer = params.fetch(:serializer, :json).to_sym
         end
 
         # Brodcasts event to all subscribes
@@ -31,11 +32,14 @@ module Hanami
         # @since 0.1.0
         def broadcast(event_name, payload)
           @redis.with do |conn|
-            conn.lpush(@stream, {
-              id: SecureRandom.uuid,
-              event_name: event_name,
-              payload: payload
-            }.to_json)
+            conn.lpush(
+              @stream,
+              serializer.serialize({
+                id: SecureRandom.uuid,
+                event_name: event_name,
+                payload: payload
+              })
+            )
           end
         end
 
@@ -55,7 +59,9 @@ module Hanami
             loop do
               @redis.with do |conn|
                 message = conn.brpoplpush(@stream, EVENT_STORE)
-                call_subscribers(JSON.parse(message))
+                call_subscribers(
+                  serializer.deserialize(message)
+                )
               end
             end
           end
@@ -80,6 +86,10 @@ module Hanami
           raise ArgumentError, 'Please, provide an instance of Redis' unless redis.is_a?(::Redis)
 
           ConnectionPool.new(size: 5, timeout: 5) { redis }
+        end
+
+        def serializer
+          Hanami::Events::Serializer[@serializer].new
         end
       end
     end
