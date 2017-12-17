@@ -62,6 +62,16 @@ Hanami::Events.initialize(:redis, redis: redis, stream: 'hanami.events')
 
 Default stream name is `hanami.events`
 
+#### PostgreSQL
+Postgres adapter is using LISTEN/NOTIFY mechanism, so you can subscribe either to any pg notify channel in your db. 
+```ruby
+Hanami::Events.initialize(:postgres, postgres: PG.connect)
+```
+
+As Redis adapter, Postgres uses `ConnectionPool` gem, so you can modify default params in same way.
+
+WARNING! Patterns are not available in Postgres adapter!
+
 #### Custom Adapter
 You can use your custom adapters. For this you need to create adapter class and register it in `Hanami::Event::Adapter` class:
 
