@@ -1,6 +1,6 @@
 # Hanami::Events
 
-[Experimental] Hanami library for building [Event-Driven Architecture](https://www.youtube.com/watch?v=STKCRSUsyP0) without any global state.
+[Experimental] Hanami library for working with pub/sub events without any global state.
 
 ## Installation
 
