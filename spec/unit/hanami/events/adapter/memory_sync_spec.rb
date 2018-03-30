@@ -13,12 +13,16 @@ RSpec.describe Hanami::Events::Adapter::MemorySync do
 
   describe '#broadcast' do
     before do
-      adapter.subscribe('user.created') { |payload| subscriber.call(payload) }
+      adapter.subscribe('user.created') { |payload| payload }
     end
+
+    subject { adapter.broadcast('user.created', user_id: 1) }
 
     it 'calls #call method with payload on subscriber' do
       expect(adapter.subscribers.first).to receive(:call).with('user.created', user_id: 1)
-      adapter.broadcast('user.created', user_id: 1)
+      subject
     end
+
+    it { expect(subject).to eq [{ user_id: 1 }] }
   end
 end

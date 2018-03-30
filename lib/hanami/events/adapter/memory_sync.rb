@@ -21,7 +21,7 @@ module Hanami
         #
         # @since 0.1.0
         def broadcast(event_name, payload)
-          @subscribers.each do |subscriber|
+          @subscribers.map do |subscriber|
             subscriber.call(event_name, payload)
           end
         end
