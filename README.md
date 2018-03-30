@@ -25,7 +25,7 @@ Hanami events support different adapters for sending events. Each adapter loads 
 ####  Memory Sync
 
 Just initialize `Hanami::Event` instance with adapter:
-**Important:** Memory adapter save nothing. Be careful! Use it only for testing.
+**Important:** Memory adapter save nothing. Be careful! Use it only for testing. Also, sync adapter returns array of results of all subscribers.
 
 ```ruby
 Hanami::Events.initialize(:memory_sync)
