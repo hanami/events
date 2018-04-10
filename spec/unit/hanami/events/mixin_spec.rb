@@ -1,7 +1,7 @@
 RSpec.describe Hanami::Events::Mixin do
   context 'when included into class' do
     before do
-      EVENT_BUS = Hanami::Events.initialize(:memory_sync)
+      EVENT_BUS = Hanami::Events.new(:memory_sync)
 
       DummyHandler = Class.new do
         include Hanami::Events::Mixin

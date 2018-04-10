@@ -1,12 +1,12 @@
 require 'support/fixtures'
 
 RSpec.describe Hanami::Events do
-  let(:event) { Hanami::Events.initialize(:memory_sync) }
+  let(:event) { Hanami::Events.new(:memory_sync) }
 
   it { expect(event).to be_a(Hanami::Events::Base) }
 
-  context 'with #new aliase' do
-    it { expect(Hanami::Events.new(:memory_sync)).to be_a(Hanami::Events::Base) }
+  context 'with #initialize aliase' do
+    it { expect(Hanami::Events.initialize(:memory_sync)).to be_a(Hanami::Events::Base) }
   end
 
   describe '#adapter' do
@@ -65,7 +65,7 @@ RSpec.describe Hanami::Events do
   it 'allows to add custom adapters' do
     Hanami::Events::Adapter.register(:mock_adapter) { MockAdapter }
 
-    event = Hanami::Events.initialize(:mock_adapter)
+    event = Hanami::Events.new(:mock_adapter)
     expect(event.adapter).to be_a(MockAdapter)
   end
 end
