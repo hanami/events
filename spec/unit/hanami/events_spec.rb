@@ -5,6 +5,10 @@ RSpec.describe Hanami::Events do
 
   it { expect(event).to be_a(Hanami::Events::Base) }
 
+  context 'with #new aliase' do
+    it { expect(Hanami::Events.new(:memory_sync)).to be_a(Hanami::Events::Base) }
+  end
+
   describe '#adapter' do
     it { expect(event.adapter).to be_a(Hanami::Events::Adapter::MemorySync) }
   end
