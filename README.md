@@ -28,7 +28,7 @@ Just initialize `Hanami::Event` instance with adapter:
 **Important:** Memory adapter save nothing. Be careful! Use it only for testing. Also, sync adapter returns array of results of all subscribers.
 
 ```ruby
-Hanami::Events.initialize(:memory_sync)
+Hanami::Events.new(:memory_sync)
 ```
 
 By default Memory adapter works in synchronous way.
@@ -40,7 +40,7 @@ Memory adapter works in separate thread. It allows subscribers to handle events 
 **Important:** Memory adapter save nothing. Be careful! Use it only for testing.
 
 ```ruby
-Hanami::Events.initialize(:memory_async)
+Hanami::Events.new(:memory_async)
 ```
 
 #### Redis
@@ -48,7 +48,7 @@ Redis adapter works only with `ConnectionPool` gem. Hanami events uses redis `BR
 
 ```ruby
 redis = ConnectionPool.new(size: 5, timeout: 5) { Redis.new(host: 'localhost', port: 6379) }
-Hanami::Events.initialize(:redis, redis: redis)
+Hanami::Events.new(:redis, redis: redis)
 ```
 
 If you pass just a Redis instance, `Hanami::Events` will wrap this instance into `ConnectionPool` anyways.
@@ -57,7 +57,7 @@ Default params will be used: `ConnectionPool.new(size: 5, timeout: 5) { redis }`
 There is a way to define a stream name for Redis by passing `stream` param to initialize:
 
 ```ruby
-Hanami::Events.initialize(:redis, redis: redis, stream: 'hanami.events')
+Hanami::Events.new(:redis, redis: redis, stream: 'hanami.events')
 ```
 
 Default stream name is `hanami.events`
@@ -68,19 +68,19 @@ You can use your custom adapters. For this you need to create adapter class and 
 ```ruby
 Hanami::Events::Adapter.register(:kinesis) { Kinesis }
 
-event = Hanami::Events.initialize(:kinesis)
+event = Hanami::Events.new(:kinesis)
 # => event instance with your kinesis adapter
 ```
 
 ### Broadcaster
 ```ruby
-events = Hanami::Events.initialize(:memory_sync)
+events = Hanami::Events.new(:memory_sync)
 events.broadcast('user.created', user: user)
 ```
 
 ### Subscriber
 ```ruby
-events = Hanami::Events.initialize(:memory_sync)
+events = Hanami::Events.new(:memory_sync)
 events.subscribe('user.created') { |payload| p payload }
 
 events.broadcast('user.created', user_id: 1)
@@ -92,7 +92,7 @@ There is a mixin that allows to subscribe to events from class.
 
 Example:
 ```ruby
-$events = Hanami::Events.initialize(:memory)
+$events = Hanami::Events.new(:memory)
 
 class WelcomeMailer
   include Hanami::Events::Mixin
@@ -113,7 +113,7 @@ end
 * `*.created` - match all evensts ended on `.created`
 
 ```ruby
-events = Hanami::Events.initialize(:memory_sync)
+events = Hanami::Events.new(:memory_sync)
 events.subscribe('*') { |payload| p 'all events' }
 events.subscribe('user.*') { |payload| p 'user events' }
 events.subscribe('*.created') { |payload| p 'something created' }
@@ -133,7 +133,7 @@ You can use any loggers in your subscribe block. For this initialize events inst
 ```ruby
 require 'logger'
 
-events = Hanami::Events.initialize(:memory_sync, logger: Logger.new(StringIO.new))
+events = Hanami::Events.new(:memory_sync, logger: Logger.new(StringIO.new))
 events.subscribe('*') { |payload| logger.info("Event: #{payload}" }
 
 events.broadcast('user.updated', user_id: 1)
