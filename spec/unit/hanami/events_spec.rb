@@ -30,7 +30,8 @@ RSpec.describe Hanami::Events do
     before do
       event.subscribe('user.created') { |payload| payload }
       event.subscribe('user.updated') { |payload| payload }
-      event.subscribe('user.deleted') { |payload| payload }
+      deleted_proc = proc { |payload| payload }
+      event.subscribe('user.deleted', deleted_proc)
     end
 
     it 'returns list of all subscribed events' do
