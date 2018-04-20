@@ -25,10 +25,15 @@ module Hanami
       # Calls subscribes for selected adapter
       #
       # @param event_name [Symbol, String] the event name
+      # @param callable_object [Proc] the object which will call istead block
       #
       # @since 0.1.0
-      def subscribe(event_name, &block)
-        adapter.subscribe(event_name, &block)
+      def subscribe(event_name, callable_object = nil, &block)
+        if callable_object && callable_object.respond_to?(:call)
+          adapter.subscribe(event_name, &-> (*args) { callable_object.call(*args) } )
+        else
+          adapter.subscribe(event_name, &block)
+        end
       end
 
       # Returns all events subscribed for current instance

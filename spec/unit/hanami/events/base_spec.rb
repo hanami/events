@@ -26,12 +26,15 @@ RSpec.describe Hanami::Events::Base do
     before do
       event_bus.subscribe('user.created', &handler)
       event_bus.subscribe('user.updated', &handler)
+      event_bus.subscribe('user.deleted', handler)
     end
 
     it 'shows meta information for subscribed events' do
-      expect(event_bus.subscribed_events).to(
-        eq([{:name=>"user.created"}, {:name=>"user.updated"}])
-      )
+      expect(event_bus.subscribed_events).to eq [
+        { name: 'user.created' },
+        { name: 'user.updated' },
+        { name: 'user.deleted' }
+      ]
     end
   end
 end

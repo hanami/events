@@ -87,6 +87,18 @@ events.broadcast('user.created', user_id: 1)
 # => { user_id: 1 }
 ```
 
+Also, you can use callable objects too:
+
+```ruby
+Container.register('user.handlers.created') { |payload| p payload }
+
+events = Hanami::Events.new(:memory_sync)
+events.subscribe('user.created', Container['user.handlers.created'])
+
+events.broadcast('user.created', user_id: 1)
+# => { user_id: 1 }
+```
+
 ### Mixin
 There is a mixin that allows to subscribe to events from class.
 
@@ -153,7 +165,7 @@ events.subscribe('*.created') { |payload| p 'something created' }
 
 require 'hanami/events/formatter'
 events.format(:json) # => JSON string with all events
-events.format(:xml)  # => XML string with all events 
+events.format(:xml)  # => XML string with all events
 events.format(:plain_text)
 # => Events:
 # =>         "user.created"
