@@ -37,7 +37,7 @@ module Hanami
       #
       # @api private
       def call(event_name, payload)
-        @runner.(payload) if @pattern_matcher.match?(event_name)
+        @runner.call(payload) if @pattern_matcher.match?(event_name)
       end
 
       # Returns meta information for subscriber

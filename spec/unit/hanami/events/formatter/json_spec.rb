@@ -8,7 +8,7 @@ RSpec.describe Hanami::Events::Formatter::Json do
       { title: 'user.*' },
       { title: 'user.created' },
       { title: 'post.*' },
-      { title: 'post.created' },
+      { title: 'post.created' }
     ]
   end
 

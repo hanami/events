@@ -5,9 +5,9 @@ RSpec.describe Hanami::Events::Adapter::MemorySync do
 
   describe '#subscribe' do
     it 'pushes subscriber to the list of subscribers' do
-      expect {
+      expect do
         adapter.subscribe('event.name') { |payload| payload }
-      }.to change { adapter.subscribers.count }.by(1)
+      end.to change { adapter.subscribers.count }.by(1)
     end
   end
 

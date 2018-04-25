@@ -3,6 +3,7 @@ require 'json'
 module Hanami
   module Events
     class Serializer
+      # Simple serializer for json format
       class Json
         def serialize(event)
           event.to_json
