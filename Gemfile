@@ -10,4 +10,5 @@ unless ENV['TRAVIS']
 end
 
 gem 'simplecov', require: false, group: :test
+gem 'rubocop'
 gem 'mutant-rspec'
