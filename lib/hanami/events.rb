@@ -37,7 +37,7 @@ module Hanami
       def new(adapter_name, **options)
         Base.new(adapter_name, options)
       end
-      alias_method :initialize, :new
+      alias initialize new
     end
   end
 end

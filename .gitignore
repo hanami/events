@@ -11,3 +11,4 @@ tags
 *.swp
 .ruby-gemset
 .ruby-version
+.rubocop-https-*

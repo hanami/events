@@ -35,19 +35,21 @@ RSpec.describe Hanami::Events do
     end
 
     it 'returns list of all subscribed events' do
-      expect(event.subscribed_events).to eq([
-        { name: 'user.created' },
-        { name: 'user.updated' },
-        { name: 'user.deleted' }
-      ])
+      expect(event.subscribed_events).to eq(
+        [
+          { name: 'user.created' },
+          { name: 'user.updated' },
+          { name: 'user.deleted' }
+        ]
+      )
     end
   end
 
   describe '#subscribe' do
     it 'pushes subscriber to subscribers list' do
-      expect {
+      expect do
         event.subscribe('event.name') { |payload| payload }
-      }.to change { event.adapter.subscribers.count }.by(1)
+      end.to change { event.adapter.subscribers.count }.by(1)
     end
   end
 

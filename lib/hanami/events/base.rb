@@ -30,7 +30,7 @@ module Hanami
       # @since 0.1.0
       def subscribe(event_name, callable_object = nil, &block)
         if callable_object && callable_object.respond_to?(:call)
-          adapter.subscribe(event_name, &-> (*args) { callable_object.call(*args) } )
+          adapter.subscribe(event_name, &->(*args) { callable_object.call(*args) })
         else
           adapter.subscribe(event_name, &block)
         end

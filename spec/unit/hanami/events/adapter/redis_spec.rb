@@ -54,9 +54,9 @@ RSpec.describe Hanami::Events::Adapter::Redis do
     after { redis.with(&:flushall) }
 
     it 'pushes subscriber to the list of subscribers' do
-      expect {
+      expect do
         adapter.subscribe('event.name', &handler)
-      }.to change { adapter.subscribers.count }.by(1)
+      end.to change { adapter.subscribers.count }.by(1)
     end
 
     it 'spawns just one thread' do

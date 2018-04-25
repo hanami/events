@@ -8,7 +8,7 @@ RSpec.describe Hanami::Events::Formatter::PlainText do
       { name: 'user.*' },
       { name: 'user.created' },
       { name: 'post.*' },
-      { name: 'post.created' },
+      { name: 'post.created' }
     ]
   end
 

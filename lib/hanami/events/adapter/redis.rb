@@ -10,8 +10,8 @@ module Hanami
       #
       # @api private
       class Redis
-        DEFAULT_STREAM = 'hanami.events'
-        EVENT_STORE = 'hanami.event_store'
+        DEFAULT_STREAM = 'hanami.events'.freeze
+        EVENT_STORE = 'hanami.event_store'.freeze
 
         attr_reader :subscribers
 
@@ -34,11 +34,11 @@ module Hanami
           @redis.with do |conn|
             conn.lpush(
               @stream,
-              serializer.serialize({
+              serializer.serialize(
                 id: SecureRandom.uuid,
                 event_name: event_name,
                 payload: payload
-              })
+              )
             )
           end
         end
@@ -49,7 +49,7 @@ module Hanami
         # @param block [Block] to execute when event is broadcasted
         #
         # @since 0.1.0
-        def subscribe(event_name, &block)
+        def subscribe(event_name, &block) # rubocop:disable Metrics/MethodLength
           @subscribers << Subscriber.new(event_name, block, @logger)
 
           return if thread_spawned?

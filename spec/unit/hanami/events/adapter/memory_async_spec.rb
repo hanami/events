@@ -1,13 +1,14 @@
 require 'hanami/events/adapter/memory_async'
 
 RSpec.describe Hanami::Events::Adapter::MemoryAsync do
+  # rubocop:disable Style/GlobalVars
   let(:adapter) { described_class.new }
 
   describe '#subscribe' do
     it 'pushes subscriber to the list of subscribers' do
-      expect {
+      expect do
         adapter.subscribe('event.name') { |payload| payload }
-      }.to change { adapter.subscribers.count }.by(1)
+      end.to change { adapter.subscribers.count }.by(1)
     end
   end
 
@@ -59,4 +60,5 @@ RSpec.describe Hanami::Events::Adapter::MemoryAsync do
       end
     end
   end
+  # rubocop:enable Style/GlobalVars
 end
