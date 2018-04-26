@@ -9,3 +9,4 @@ gem 'yard', require: false unless ENV['TRAVIS']
 
 gem 'simplecov', require: false, group: :test
 gem 'mutant-rspec'
+gem 'rubocop',   '0.50.0', require: false
