@@ -28,11 +28,11 @@ module Hanami
       # @param callable_object [Proc] the object which will call istead block
       #
       # @since 0.1.0
-      def subscribe(event_name, callable_object = nil, &block)
+      def subscribe(event_name, callable_object = nil, **kwargs, &block)
         if callable_object && callable_object.respond_to?(:call)
-          adapter.subscribe(event_name, &->(*args) { callable_object.call(*args) })
+          adapter.subscribe(event_name, kwargs, &->(*rest) { callable_object.call(*rest) })
         else
-          adapter.subscribe(event_name, &block)
+          adapter.subscribe(event_name, kwargs, &block)
         end
       end
 
