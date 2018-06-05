@@ -1,11 +1,10 @@
 RSpec.describe Hanami::Events::Mixin do
   context 'when included into class' do
-    before do
-      EVENT_BUS = Hanami::Events.new(:memory_sync)
+    let(:event_bus) { Hanami::Events.new(:memory_sync) }
 
-      DummyHandler = Class.new do
+    subject(:dummy_handler) do
+      Class.new do
         include Hanami::Events::Mixin
-        subscribe_to EVENT_BUS, 'user.created'
 
         def call(payload)
           payload
@@ -14,8 +13,19 @@ RSpec.describe Hanami::Events::Mixin do
     end
 
     it 'calls #call method on subscriber with payload' do
-      expect_any_instance_of(DummyHandler).to receive(:call).with(user_id: 1)
-      EVENT_BUS.broadcast('user.created', user_id: 1)
+      dummy_handler.send(:subscribe_to, event_bus, 'user.created')
+      expect_any_instance_of(dummy_handler).to receive(:call).with(user_id: 1)
+
+      event_bus.broadcast('user.created', user_id: 1)
+    end
+
+    context 'with extra arguments' do
+      it 'includes extra args when calling #subscribe on the event bus' do
+        name = 'dummy-handler'
+        expect(event_bus).to receive(:subscribe).with(anything, name: name)
+
+        dummy_handler.send(:subscribe_to, event_bus, 'user.created', name: name)
+      end
     end
   end
 end

@@ -25,9 +25,9 @@ module Hanami
 
       # Class interfaces
       module ClassMethods
-        def subscribe_to(event_bus, event_name)
+        def subscribe_to(event_bus, event_name, *args)
           klass = self
-          event_bus.subscribe(event_name) { |payload| klass.new.call(payload) }
+          event_bus.subscribe(event_name, *args) { |payload| klass.new.call(payload) }
         end
       end
     end
