@@ -49,7 +49,7 @@ module Hanami
         # @param block [Block] to execute when event is broadcasted
         #
         # @since 0.1.0
-        def subscribe(event_name, &block) # rubocop:disable Metrics/MethodLength
+        def subscribe(event_name, _kwargs = EMPTY_HASH, &block) # rubocop:disable Metrics/MethodLength
           @subscribers << Subscriber.new(event_name, block, @logger)
 
           return if thread_spawned?

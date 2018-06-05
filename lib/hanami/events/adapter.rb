@@ -8,6 +8,8 @@ module Hanami
     #
     # @api private
     class Adapter
+      EMPTY_HASH = {}.freeze
+
       extend Dry::Container::Mixin
 
       register(:memory_sync) do

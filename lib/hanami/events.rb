@@ -14,6 +14,8 @@ module Hanami
   #
   # @see https://github.com/hanami/events
   module Events
+    EMPTY_HASH = {}.freeze
+
     class << self
       # Initialize event instance with selected adapter
       #

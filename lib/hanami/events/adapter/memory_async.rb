@@ -15,6 +15,7 @@ module Hanami
           @logger = logger
           @subscribers = []
           @event_queue = Queue.new
+          @thread_spawned = false
         end
 
         # Brodcasts event to all subscribes
@@ -33,7 +34,7 @@ module Hanami
         # @param block [Block] to execute when event is broadcasted
         #
         # @since 0.1.0
-        def subscribe(event_name, &block)
+        def subscribe(event_name, _kwargs = EMPTY_HASH, &block)
           @subscribers << Subscriber.new(event_name, block, @logger)
 
           return if thread_spawned?

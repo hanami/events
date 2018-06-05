@@ -16,9 +16,16 @@ RSpec.describe Hanami::Events::Base do
   describe 'subscribe' do
     it 'calls subscribe on adapter' do
       expect_any_instance_of(Hanami::Events::Adapter::MemorySync).to(
-        receive(:subscribe).with('user.created', &handler)
+        receive(:subscribe).with('user.created', {}, &handler)
       )
       event_bus.subscribe('user.created', &handler)
+    end
+
+    it 'allows arbitrary args' do
+      expect_any_instance_of(Hanami::Events::Adapter::MemorySync).to(
+        receive(:subscribe).with('user.created', id: 'test', &handler)
+      )
+      event_bus.subscribe('user.created', id: 'test', &handler)
     end
   end
 
