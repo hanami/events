@@ -1,6 +1,14 @@
 RSpec.describe Hanami::Events::Matcher do
   let(:matcher) { described_class.new(pattern) }
 
+  context 'when pattern is regular exeption' do
+    let(:pattern) { /\Auser/ }
+
+    it { expect(matcher.match?('user.created')).to be true }
+    it { expect(matcher.match?('user.updated')).to be true }
+    it { expect(matcher.match?('post.created')).to be false }
+  end
+
   context 'when pattern match only one event' do
     let(:pattern) { 'user.created' }
 

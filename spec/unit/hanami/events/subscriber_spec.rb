@@ -12,7 +12,7 @@ RSpec.describe Hanami::Events::Subscriber do
     end
 
     context 'when event pattern match range' do
-      let(:subscriber) { described_class.new('user.*', block) }
+      let(:subscriber) { described_class.new(/\Auser.*/, block) }
 
       it { expect(subscriber.call('user.created', user_id: 1)).to eq(user_id: 1) }
       it { expect(subscriber.call('user.deleted', user_id: 1)).to eq(user_id: 1) }

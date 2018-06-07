@@ -99,7 +99,7 @@ events.broadcast('user.created', user_id: 1)
 # => { user_id: 1 }
 ```
 
-### Mixin
+#### Mixin
 There is a mixin that allows to subscribe to events from class.
 
 Example:
@@ -119,7 +119,27 @@ end
 
 `$events.broadcast('user.created', user_i: 1)` would trigger `WelcomeMailer#call` with `user_id: 1` as a payload.
 
+#### Regexp
+You can use regexp object in `#subscribe`:
+
+```ruby
+events = Hanami::Events.new(:memory_sync)
+events.subscribe(/.*/) { |payload| p 'all events' }
+events.subscribe(/\Auser\..*/) { |payload| p 'user events' }
+events.subscribe(/.*\.created\z/) { |payload| p 'something created' }
+
+events.broadcast('user.updated', user_id: 1)
+# => 'all events'
+# => 'user events'
+
+events.broadcast('post.created', user_id: 1)
+# => 'all events'
+# => 'something created'
+```
+
 #### Patterns
+Or use specific sting patterns:
+
 * `*` - match all events
 * `user.*` - match all evensts started on `user.`
 * `*.created` - match all evensts ended on `.created`
