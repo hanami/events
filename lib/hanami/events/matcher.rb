@@ -15,7 +15,7 @@ module Hanami
       RANGE_PATTERN = '*'.freeze
 
       def initialize(pattern)
-        @pattern = Regexp.new(to_regexp_string(pattern))
+        @pattern = pattern.is_a?(Regexp) ? pattern : Regexp.new(to_regexp_string(pattern))
       end
 
       def match?(event_name)
