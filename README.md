@@ -62,6 +62,11 @@ Hanami::Events.new(:redis, redis: redis, stream: 'hanami.events')
 
 Default stream name is `hanami.events`
 
+#### Google Cloud Pub/Sub
+
+The [hanami-events-cloud_pubsub](https://github.com/adHawk/hanami-events-cloud_pubsub) gem uses Google Cloud
+Pub/Sub as the Pub/Sub backend, allowing you to scale without maintaining infrastructure.
+
 #### Custom Adapter
 You can use your custom adapters. For this you need to create adapter class and register it in `Hanami::Event::Adapter` class:
 
