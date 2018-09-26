@@ -18,7 +18,7 @@ module Hanami
         def initialize(params)
           @redis = with_connection_pool(params[:redis])
           @logger = params[:logger]
-          @subscribers = []
+          @subscribers = Concurrent::Array.new
           @stream = params.fetch(:stream, DEFAULT_STREAM)
           @thread_spawned = false
           @serializer = params.fetch(:serializer, :json).to_sym

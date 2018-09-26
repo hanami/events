@@ -13,7 +13,7 @@ module Hanami
 
         def initialize(logger: nil, **)
           @logger = logger
-          @subscribers = []
+          @subscribers = Concurrent::Array.new
           @event_queue = Queue.new
           @thread_spawned = false
         end

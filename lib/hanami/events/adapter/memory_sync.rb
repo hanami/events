@@ -11,7 +11,7 @@ module Hanami
 
         def initialize(logger: nil, **)
           @logger = logger
-          @subscribers = []
+          @subscribers = Concurrent::Array.new
         end
 
         # Brodcasts event to all subscribes

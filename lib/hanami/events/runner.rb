@@ -10,6 +10,7 @@ module Hanami
       end
 
       def start(options: {})
+        logger.info "Running in #{RUBY_DESCRIPTION}"
         logger.info "Started server with #{event_instance.adapter.class} adapter"
 
         loop do
