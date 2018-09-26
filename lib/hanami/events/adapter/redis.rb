@@ -53,6 +53,9 @@ module Hanami
           @subscribers << Subscriber.new(event_name, block, @logger)
         end
 
+        # Method for call all subscribers in one time
+        #
+        # @since 0.2.0
         def poll_subscribers
           @redis.with do |conn|
             message = conn.brpoplpush(@stream, EVENT_STORE)

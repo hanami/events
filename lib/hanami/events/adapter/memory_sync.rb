@@ -35,6 +35,13 @@ module Hanami
         def subscribe(event_name, _kwargs = EMPTY_HASH, &block)
           @subscribers << Subscriber.new(event_name, block, @logger)
         end
+
+        # Method for call all subscribers in one time
+        #
+        # @since 0.2.0
+        def poll_subscribers
+          true
+        end
       end
     end
   end
