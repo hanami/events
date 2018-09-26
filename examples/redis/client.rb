@@ -1,4 +1,5 @@
 require 'hanami/events'
+require 'connection_pool'
 require 'redis'
 
 redis = ConnectionPool.new(size: 5, timeout: 5) { Redis.new(host: 'localhost', port: 6379) }
