@@ -13,7 +13,7 @@ module Hanami
         DEFAULT_STREAM = 'hanami.events'.freeze
         EVENT_STORE = 'hanami.event_store'.freeze
 
-        attr_reader :subscribers
+        attr_reader :subscribers, :logger
 
         def initialize(params)
           @redis = with_connection_pool(params[:redis])
@@ -51,19 +51,14 @@ module Hanami
         # @since 0.1.0
         def subscribe(event_name, _kwargs = EMPTY_HASH, &block) # rubocop:disable Metrics/MethodLength
           @subscribers << Subscriber.new(event_name, block, @logger)
+        end
 
-          return if thread_spawned?
-          thread_spawned!
-
-          Thread.new do
-            loop do
-              @redis.with do |conn|
-                message = conn.brpoplpush(@stream, EVENT_STORE)
-                call_subscribers(
-                  serializer.deserialize(message)
-                )
-              end
-            end
+        def poll_subscribers
+          @redis.with do |conn|
+            message = conn.brpoplpush(@stream, EVENT_STORE)
+            call_subscribers(
+              serializer.deserialize(message)
+            )
           end
         end
 

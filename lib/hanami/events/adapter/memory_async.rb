@@ -9,7 +9,7 @@ module Hanami
       #
       # @api private
       class MemoryAsync
-        attr_reader :subscribers
+        attr_reader :subscribers, :logger
 
         def initialize(logger: nil, **)
           @logger = logger
@@ -36,13 +36,10 @@ module Hanami
         # @since 0.1.0
         def subscribe(event_name, _kwargs = EMPTY_HASH, &block)
           @subscribers << Subscriber.new(event_name, block, @logger)
+        end
 
-          return if thread_spawned?
-          thread_spawned!
-
-          Thread.new do
-            loop { call_subscribers }
-          end
+        def poll_subscribers
+          call_subscribers
         end
 
         private

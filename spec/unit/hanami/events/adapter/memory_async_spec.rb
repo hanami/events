@@ -12,6 +12,20 @@ RSpec.describe Hanami::Events::Adapter::MemoryAsync do
     end
   end
 
+  describe '#poll_subscribers' do
+    before do
+      $user_array = []
+      adapter.subscribe('user.created') { |payload| $user_array << payload }
+    end
+
+    it 'poll all adapter subscribers one time' do
+      adapter.broadcast('user.created', user_id: 1)
+      expect($user_array).to eq []
+      adapter.poll_subscribers
+      expect($user_array).to eq [{ user_id: 1 }]
+    end
+  end
+
   describe '#broadcast' do
     before do
       $user_array = []
@@ -20,24 +34,8 @@ RSpec.describe Hanami::Events::Adapter::MemoryAsync do
 
     it 'calls #call method with payload on subscriber' do
       adapter.broadcast('user.created', user_id: 1)
-      sleep 0.01
+      adapter.poll_subscribers
       expect($user_array).to eq [{ user_id: 1 }]
-    end
-
-    context 'when subscribe have heavy calculation ' do
-      before do
-        $post_array = []
-
-        adapter.subscribe('post.created') do |payload|
-          sleep 1
-          $post_array << payload
-        end
-      end
-
-      it 'calls #call method with payload on subscriber' do
-        adapter.broadcast('post.created', user_id: 1)
-        expect($post_array).to eq []
-      end
     end
 
     context 'when system have 2 subscribes ' do
@@ -55,7 +53,7 @@ RSpec.describe Hanami::Events::Adapter::MemoryAsync do
 
       it 'calls #call method with payload on subscriber' do
         adapter.broadcast('comment.created', user_id: 1)
-        sleep 0.1
+        adapter.poll_subscribers
         expect($comment_array).to eq [{ user_id: 1 }, { user_id: 1 }]
       end
     end
