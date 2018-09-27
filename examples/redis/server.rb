@@ -9,7 +9,14 @@ events = Hanami::Events.initialize(:redis, redis: redis, logger: Logger.new(STDO
 events.subscribe('user.created') { |payload| logger.info "Create user: #{payload}" }
 events.subscribe('user.created') { |payload| logger.info "Send notification to user: #{payload}" }
 
-events.subscribe('user.deleted') { |payload| logger.info "Delete user: #{payload}" }
+events.subscribe('user.deleted') { |payload| logger.info 'start deleting'; sleep(10); logger.info "Delete user: #{payload}" }
 
 runner = Hanami::Events::Runner.new(events)
+
+
+Thread.new do
+  sleep 10
+  runner.gracefully_shutdown
+end
+
 runner.start

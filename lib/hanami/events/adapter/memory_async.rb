@@ -41,7 +41,7 @@ module Hanami
         # Method for call all subscribers in one time
         #
         # @since 0.2.0
-        def poll_subscribers
+        def pull_subscribers
           call_subscribers
         end
 

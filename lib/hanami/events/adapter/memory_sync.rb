@@ -7,7 +7,7 @@ module Hanami
       #
       # @api private
       class MemorySync
-        attr_reader :subscribers
+        attr_reader :subscribers, :logger
 
         def initialize(logger: nil, **)
           @logger = logger
@@ -39,7 +39,7 @@ module Hanami
         # Method for call all subscribers in one time
         #
         # @since 0.2.0
-        def poll_subscribers
+        def pull_subscribers
           true
         end
       end

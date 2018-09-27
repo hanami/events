@@ -28,7 +28,7 @@ RSpec.describe Hanami::Events::Runner do
     expect($comment_array).to eq []
     thread = Thread.new { event_runner.start }
 
-    sleep 0.1
+    sleep 0.2
     expect($comment_array).to eq [{ user_id: 1 }, { user_id: 1 }]
     thread.exit
   end

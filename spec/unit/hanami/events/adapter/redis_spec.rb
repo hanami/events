@@ -66,7 +66,7 @@ RSpec.describe Hanami::Events::Adapter::Redis do
       it 'saves event to event store' do
         adapter.subscribe('user.created', &handler)
         adapter.broadcast('user.created', user_id: 1)
-        adapter.poll_subscribers
+        adapter.pull_subscribers
         expect(events).to eq ['{"id":"abcd1234","event_name":"user.created","payload":{"user_id":1}}']
       end
     end
