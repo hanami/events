@@ -13,11 +13,11 @@ module Hanami
         logger.info "Running in #{RUBY_DESCRIPTION}"
         logger.info "Started server with #{event_instance.adapter.class} adapter"
 
-        @pool = Concurrent::FixedThreadPool.new(threads, fallback_policy: :discard)
+        @pool = Concurrent::ThreadPoolExecutor.new(
+          max_queue: 10, min_threads: 1, max_threads: threads, fallback_policy: :discard
+        )
 
         loop do
-          puts "running: #{running?}; shuttingdown: #{shuttingdown?}; shutdown: #{shutdown?}"
-
           if pool.running?
             pool.post { event_instance.adapter.pull_subscribers }
           end
