@@ -6,6 +6,7 @@ require "hanami/events/base"
 require "hanami/events/subscriber"
 require "hanami/events/mixin"
 require "hanami/events/version"
+require "hanami/events/runner"
 
 module Hanami
   # Events framework for Hanami

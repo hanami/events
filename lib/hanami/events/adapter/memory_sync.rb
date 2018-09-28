@@ -7,11 +7,11 @@ module Hanami
       #
       # @api private
       class MemorySync
-        attr_reader :subscribers
+        attr_reader :subscribers, :logger
 
         def initialize(logger: nil, **)
           @logger = logger
-          @subscribers = []
+          @subscribers = Concurrent::Array.new
         end
 
         # Brodcasts event to all subscribes
@@ -34,6 +34,13 @@ module Hanami
         # @since 0.1.0
         def subscribe(event_name, _kwargs = EMPTY_HASH, &block)
           @subscribers << Subscriber.new(event_name, block, @logger)
+        end
+
+        # Method for call all subscribers in one time
+        #
+        # @since 0.2.0
+        def pull_subscribers
+          true
         end
       end
     end

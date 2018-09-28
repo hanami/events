@@ -13,12 +13,12 @@ module Hanami
         DEFAULT_STREAM = 'hanami.events'.freeze
         EVENT_STORE = 'hanami.event_store'.freeze
 
-        attr_reader :subscribers
+        attr_reader :subscribers, :logger
 
         def initialize(params)
           @redis = with_connection_pool(params[:redis])
           @logger = params[:logger]
-          @subscribers = []
+          @subscribers = Concurrent::Array.new
           @stream = params.fetch(:stream, DEFAULT_STREAM)
           @thread_spawned = false
           @serializer = params.fetch(:serializer, :json).to_sym
@@ -49,21 +49,19 @@ module Hanami
         # @param block [Block] to execute when event is broadcasted
         #
         # @since 0.1.0
-        def subscribe(event_name, _kwargs = EMPTY_HASH, &block) # rubocop:disable Metrics/MethodLength
+        def subscribe(event_name, _kwargs = EMPTY_HASH, &block)
           @subscribers << Subscriber.new(event_name, block, @logger)
+        end
 
-          return if thread_spawned?
-          thread_spawned!
-
-          Thread.new do
-            loop do
-              @redis.with do |conn|
-                message = conn.brpoplpush(@stream, EVENT_STORE)
-                call_subscribers(
-                  serializer.deserialize(message)
-                )
-              end
-            end
+        # Method for call all subscribers in one time
+        #
+        # @since 0.2.0
+        def pull_subscribers
+          @redis.with do |conn|
+            message = conn.brpoplpush(@stream, EVENT_STORE)
+            call_subscribers(
+              serializer.deserialize(message)
+            )
           end
         end
 
