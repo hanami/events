@@ -13,7 +13,6 @@ events.subscribe('user.deleted') { |payload| logger.info 'start deleting'; sleep
 
 runner = Hanami::Events::Runner.new(events)
 
-
 Thread.new do
   sleep 10
   runner.gracefully_shutdown

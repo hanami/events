@@ -9,7 +9,7 @@ module Hanami
         @options = options
       end
 
-      def start(threads: 5)
+      def start(threads: 5) # rubocop:disable Metrics/AbcSize
         logger.info "Running in #{RUBY_DESCRIPTION}"
         logger.info "Started server with #{event_instance.adapter.class} adapter"
 
@@ -18,9 +18,7 @@ module Hanami
         )
 
         loop do
-          if pool.running?
-            pool.post { event_instance.adapter.pull_subscribers }
-          end
+          pool.post { event_instance.adapter.pull_subscribers } if pool.running?
 
           return if pool.shutdown?
         end
