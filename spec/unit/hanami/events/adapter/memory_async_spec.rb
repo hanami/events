@@ -32,6 +32,16 @@ RSpec.describe Hanami::Events::Adapter::MemoryAsync do
       adapter.subscribe('user.created') { |payload| $user_array << payload }
     end
 
+    it 'returns uuid for each broadcast' do
+      eid1 = adapter.broadcast('user.created', user_id: 1)
+      eid2 = adapter.broadcast('user.created', user_id: 2)
+
+      expect(eid1).to be_a(String)
+      expect(eid1).to be_a(String)
+
+      expect(eid1).to_not eq(eid2)
+    end
+
     it 'calls #call method with payload on subscriber' do
       adapter.broadcast('user.created', user_id: 1)
       adapter.pull_subscribers
