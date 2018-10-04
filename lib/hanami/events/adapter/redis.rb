@@ -31,16 +31,15 @@ module Hanami
         #
         # @since 0.1.0
         def broadcast(event_name, payload)
+          event_id = SecureRandom.uuid
+
           @redis.with do |conn|
             conn.lpush(
               @stream,
-              serializer.serialize(
-                id: SecureRandom.uuid,
-                event_name: event_name,
-                payload: payload
-              )
+              serializer.serialize(id: event_id, event_name: event_name, payload: payload)
             )
           end
+          event_id
         end
 
         # Subscribes block for selected event

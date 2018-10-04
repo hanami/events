@@ -25,7 +25,9 @@ module Hanami
         #
         # @since 0.1.0
         def broadcast(event_name, payload)
-          @event_queue << { id: SecureRandom.uuid, name: event_name, payload: payload }
+          event_id = SecureRandom.uuid
+          @event_queue << { id: event_id, name: event_name, payload: payload }
+          event_id
         end
 
         # Subscribes block for selected event
