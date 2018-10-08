@@ -152,7 +152,7 @@ class WelcomeMailer
 end
 ```
 
-`$events.broadcast('user.created', user_i: 1)` would trigger `WelcomeMailer#call` with `user_id: 1` as a payload.
+`$events.broadcast('user.created', user_id: 1)` would trigger `WelcomeMailer#call` with `user_id: 1` as a payload.
 
 #### Regexp
 You can use regexp object in `#subscribe`:
