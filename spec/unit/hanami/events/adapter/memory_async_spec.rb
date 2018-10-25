@@ -1,7 +1,7 @@
 require 'hanami/events/adapter/memory_async'
+require_relative '../../../../support/data_objects'
 
 RSpec.describe Hanami::Events::Adapter::MemoryAsync do
-  # rubocop:disable Style/GlobalVars
   let(:adapter) { described_class.new }
 
   describe '#subscribe' do
@@ -55,6 +55,35 @@ RSpec.describe Hanami::Events::Adapter::MemoryAsync do
         adapter.broadcast('comment.created', user_id: 1)
         adapter.pull_subscribers
         expect($comment_array).to eq [{ user_id: 1 }, { user_id: 1 }]
+      end
+    end
+
+    context 'with mapping data object' do
+      before do
+        $pure_updated_user_array = []
+        adapter.subscribe('pure_user.updated', map_to: EventObjects::Pure) { |payload| $pure_updated_user_array << payload }
+
+        $struct_updated_user_array = []
+        adapter.subscribe('struct_user.updated', map_to: EventObjects::Struct) { |payload| $struct_updated_user_array << payload }
+        $shallow_updated_user_array = []
+        adapter.subscribe('shallow_user.updated', map_to: EventObjects::Shallow) { |payload| $shallow_updated_user_array << payload }
+      end
+
+      it 'calls #call method with payload on subscriber' do
+        adapter.broadcast('pure_user.updated', user_id: 1)
+        adapter.pull_subscribers
+        expect($pure_updated_user_array.count).to eq(1)
+        expect($pure_updated_user_array.first).to eq(EventObjects::Pure.new(user_id: 1))
+
+        adapter.broadcast('struct_user.updated', user_id: 1)
+        adapter.pull_subscribers
+        expect($struct_updated_user_array.count).to eq(1)
+        expect($struct_updated_user_array.first).to eq(EventObjects::Struct.new(user_id: 1))
+
+        adapter.broadcast('shallow_user.updated', user_id: 1)
+        adapter.pull_subscribers
+        expect($shallow_updated_user_array.count).to eq(1)
+        expect($shallow_updated_user_array.first).to eq(EventObjects::Shallow.new(user_id: 1))
       end
     end
   end

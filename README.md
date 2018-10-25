@@ -104,36 +104,6 @@ events.broadcast('user.created', user_id: 1)
 # => { user_id: 1 }
 ```
 
-### Runner
-For start hanami-events server you need to call `Hanami::Events::Runner` instance. It will create infinity loop for polling subscribers for your event object:
-
-```ruby
-redis = ConnectionPool.new(size: 5, timeout: 5) { Redis.new(host: 'localhost', port: 6379) }
-events = Hanami::Events.initialize(:redis, redis: redis, logger: Logger.new(STDOUT))
-
-events.subscribe('user.created') { |payload| logger.info "Create user: #{payload}" }
-events.subscribe('user.created') { |payload| logger.info "Send notification to user: #{payload}" }
-
-events.subscribe('user.deleted') { |payload| logger.info "Delete user: #{payload}" }
-
-runner = Hanami::Events::Runner.new(events)
-runner.start # will start hanami event server
-```
-
-Now you can create events and send it to subscribers:
-```ruby
-redis = ConnectionPool.new(size: 5, timeout: 5) { Redis.new(host: 'localhost', port: 6379) }
-events = Hanami::Events.initialize(:redis, redis: redis)
-
-events.broadcast('user.created', user_id: 1)
-# => I, [2018-09-27T02:17:40.186640 #12859]  INFO -- : Create user: {"user_id"=>1}
-# => I, [2018-09-27T02:17:40.186702 #12859]  INFO -- : Send notification to user: {"user_id"=>1}
-
-events.broadcast('user.deleted', user_id: 1)
-# => I, [2018-09-27T02:17:40.187096 #12859]  INFO -- : Delete user: {"user_id"=>1}
-```
-
-
 #### Mixin
 There is a mixin that allows to subscribe to events from class.
 
@@ -206,6 +176,47 @@ events.subscribe('*') { |payload| logger.info("Event: #{payload}" }
 events.broadcast('user.updated', user_id: 1)
 # => I, [2017-08-04T01:30:13.750700 #39778]  INFO -- : Event: { user_id: 1 }
 ```
+
+#### Event data objects
+You can use any typed data objects as a event data for you subscribers. For this just put `map_to` options to `subscribe` call:
+
+```ruby
+events = Hanami::Events.new(:memory_sync)
+events.subscribe('user.created', map_to: Events::UserCreated) { |payload| p payload }
+
+events.broadcast('user.created', user_id: 1)
+# => Events::UserCreated class
+```
+
+### Runner
+For start hanami-events server you need to call `Hanami::Events::Runner` instance. It will create infinity loop for polling subscribers for your event object:
+
+```ruby
+redis = ConnectionPool.new(size: 5, timeout: 5) { Redis.new(host: 'localhost', port: 6379) }
+events = Hanami::Events.initialize(:redis, redis: redis, logger: Logger.new(STDOUT))
+
+events.subscribe('user.created') { |payload| logger.info "Create user: #{payload}" }
+events.subscribe('user.created') { |payload| logger.info "Send notification to user: #{payload}" }
+
+events.subscribe('user.deleted') { |payload| logger.info "Delete user: #{payload}" }
+
+runner = Hanami::Events::Runner.new(events)
+runner.start # will start hanami event server
+```
+
+Now you can create events and send it to subscribers:
+```ruby
+redis = ConnectionPool.new(size: 5, timeout: 5) { Redis.new(host: 'localhost', port: 6379) }
+events = Hanami::Events.initialize(:redis, redis: redis)
+
+events.broadcast('user.created', user_id: 1)
+# => I, [2018-09-27T02:17:40.186640 #12859]  INFO -- : Create user: {"user_id"=>1}
+# => I, [2018-09-27T02:17:40.186702 #12859]  INFO -- : Send notification to user: {"user_id"=>1}
+
+events.broadcast('user.deleted', user_id: 1)
+# => I, [2018-09-27T02:17:40.187096 #12859]  INFO -- : Delete user: {"user_id"=>1}
+```
+
 
 ### Formatters
 You can use different formatters for displaying list of registered events for event instance. Now hanami-events support:

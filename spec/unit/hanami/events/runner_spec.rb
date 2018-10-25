@@ -1,8 +1,6 @@
 require 'connection_pool'
 require 'redis'
 require 'hanami/events/runner'
-
-# rubocop:disable Style/GlobalVars
 RSpec.describe Hanami::Events::Runner do
   let(:event_runner) { described_class.new(event_instance) }
   let(:io) { StringIO.new }
