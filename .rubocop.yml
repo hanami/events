@@ -13,3 +13,6 @@ Style/IndentHeredoc:
 Style/MixinGrouping:
   Exclude:
     - "spec/support/**/*"
+Style/GlobalVars:
+  Exclude:
+    - "spec/**/*"

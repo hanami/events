@@ -70,6 +70,22 @@ RSpec.describe Hanami::Events::Adapter::Redis do
         expect(events).to eq ['{"id":"abcd1234","event_name":"user.created","payload":{"user_id":1}}']
       end
     end
+
+    xcontext 'with mapping data object' do
+      [EventObjects::Pure, EventObjects::Struct, EventObjects::Shallow].each do |event_class|
+        before do
+          $updated_user_array = []
+          adapter.subscribe('user.updated', map_to: event_class) { |payload| $updated_user_array << payload }
+        end
+
+        it 'calls #call method with payload on subscriber' do
+          adapter.broadcast('user.updated', user_id: 1)
+          adapter.pull_subscribers
+          expect($updated_user_array.count).to eq(1)
+          expect($updated_user_array.first).to eq(event_class.new(user_id: 1))
+        end
+      end
+    end
   end
 
   describe '#broadcast' do

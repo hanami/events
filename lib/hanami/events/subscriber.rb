@@ -10,7 +10,7 @@ module Hanami
       #
       # @api private
       class Runner
-        attr_reader :logger
+        attr_reader :logger, :map_to
 
         def initialize(handler, logger)
           @handler = handler
@@ -22,10 +22,11 @@ module Hanami
         end
       end
 
-      def initialize(event_name, event_handler, logger = nil)
+      def initialize(event_name, event_handler, logger = nil, data_struct_class = nil)
         @event_name = event_name
         @pattern_matcher = Matcher.new(event_name)
         @runner = Runner.new(event_handler, logger)
+        @data_struct_class = data_struct_class
       end
 
       # Call runner with payload if event match by subscribe pattern
@@ -37,7 +38,10 @@ module Hanami
       #
       # @api private
       def call(event_name, payload)
-        @runner.call(payload) if @pattern_matcher.match?(event_name)
+        return unless @pattern_matcher.match?(event_name)
+
+        data_object = @data_struct_class ? @data_struct_class.new(payload) : payload
+        @runner.call(data_object)
       end
 
       # Returns meta information for subscriber

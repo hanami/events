@@ -26,9 +26,14 @@ Gem::Specification.new do |spec|
   spec.add_dependency "dry-container", "~> 0.6"
 
   spec.add_development_dependency "xml-simple"
-  spec.add_development_dependency "redis"
-  spec.add_development_dependency "connection_pool"
   spec.add_development_dependency "bundler", "~> 1.14"
   spec.add_development_dependency "rake", "~> 10.0"
+
+  # testing
   spec.add_development_dependency "rspec", "~> 3.5"
+  spec.add_development_dependency "redis"
+  spec.add_development_dependency "connection_pool"
+
+  spec.add_development_dependency "dry-struct"
+  spec.add_development_dependency "shallow_attributes"
 end
