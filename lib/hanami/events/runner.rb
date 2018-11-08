@@ -2,6 +2,8 @@ module Hanami
   module Events
     # Class for start subscribe loop runner
     class Runner
+      include Concurrent::Async
+
       attr_reader :event_instance, :options, :pool
 
       def initialize(event_instance, **options)
@@ -18,6 +20,7 @@ module Hanami
         )
 
         loop do
+          sleep 1
           pool.post { event_instance.adapter.pull_subscribers } if pool.running?
 
           return if pool.shutdown?
