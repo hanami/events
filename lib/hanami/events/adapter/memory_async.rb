@@ -38,13 +38,20 @@ module Hanami
         # @since 0.1.0
         def subscribe(event_name, kwargs = EMPTY_HASH, &block)
           @subscribers << Subscriber.new(event_name, block, @logger, kwargs[:map_to])
+
+          return if thread_spawned?
+          thread_spawned!
+
+          Thread.new do
+            loop { call_subscribers }
+          end
         end
 
         # Method for call all subscribers in one time
         #
         # @since 0.2.0
         def pull_subscribers
-          call_subscribers
+          true
         end
 
         private
