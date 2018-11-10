@@ -189,7 +189,7 @@ events.broadcast('user.created', user_id: 1)
 ```
 
 ### Runner
-For start hanami-events server you need to call `Hanami::Events::Runner` instance. It will create infinity loop for polling subscribers for your event object:
+For start hanami events server you need to call `Hanami::Events::Runner` instance. It will create infinity loop for polling subscribers for your event object:
 
 ```ruby
 redis = ConnectionPool.new(size: 5, timeout: 5) { Redis.new(host: 'localhost', port: 6379) }
@@ -217,6 +217,7 @@ events.broadcast('user.deleted', user_id: 1)
 # => I, [2018-09-27T02:17:40.187096 #12859]  INFO -- : Delete user: {"user_id"=>1}
 ```
 
+**IMPORTANT**: We suggest to use it only with **not** memory adapters.
 
 ### Formatters
 You can use different formatters for displaying list of registered events for event instance. Now hanami-events support:
