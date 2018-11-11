@@ -11,7 +11,7 @@ module Hanami
         @options = options
       end
 
-      def start(threads: 5) # rubocop:disable Metrics/AbcSize
+      def start(threads: 5) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
         logger.info "Running in #{RUBY_DESCRIPTION}"
         logger.info "Started server with #{event_instance.adapter.class} adapter"
 
