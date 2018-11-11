@@ -13,17 +13,7 @@ RSpec.describe Hanami::Events::Adapter::MemoryAsync do
   end
 
   describe '#pull_subscribers' do
-    before do
-      $user_array = []
-      adapter.subscribe('user.created') { |payload| $user_array << payload }
-    end
-
-    it 'pull all adapter subscribers one time' do
-      adapter.broadcast('user.created', user_id: 1)
-      expect($user_array).to eq []
-      adapter.pull_subscribers
-      expect($user_array).to eq [{ user_id: 1 }]
-    end
+    it { expect(adapter.pull_subscribers).to eq true }
   end
 
   describe '#broadcast' do
@@ -33,8 +23,8 @@ RSpec.describe Hanami::Events::Adapter::MemoryAsync do
     end
 
     it 'returns uuid for each broadcast' do
-      eid1 = adapter.broadcast('user.created', user_id: 1)
-      eid2 = adapter.broadcast('user.created', user_id: 2)
+      eid1 = adapter.broadcast('olduser.created', user_id: 1)
+      eid2 = adapter.broadcast('olduser.created', user_id: 2)
 
       expect(eid1).to be_a(String)
       expect(eid1).to be_a(String)
@@ -44,7 +34,7 @@ RSpec.describe Hanami::Events::Adapter::MemoryAsync do
 
     it 'calls #call method with payload on subscriber' do
       adapter.broadcast('user.created', user_id: 1)
-      adapter.pull_subscribers
+      sleep 0.2
       expect($user_array).to eq [{ user_id: 1 }]
     end
 
@@ -63,7 +53,7 @@ RSpec.describe Hanami::Events::Adapter::MemoryAsync do
 
       it 'calls #call method with payload on subscriber' do
         adapter.broadcast('comment.created', user_id: 1)
-        adapter.pull_subscribers
+        sleep 0.2
         expect($comment_array).to eq [{ user_id: 1 }, { user_id: 1 }]
       end
     end
@@ -81,17 +71,17 @@ RSpec.describe Hanami::Events::Adapter::MemoryAsync do
 
       it 'calls #call method with payload on subscriber' do
         adapter.broadcast('pure_user.updated', user_id: 1)
-        adapter.pull_subscribers
+        sleep 0.2
         expect($pure_updated_user_array.count).to eq(1)
         expect($pure_updated_user_array.first).to eq(EventObjects::Pure.new(user_id: 1))
 
         adapter.broadcast('struct_user.updated', user_id: 1)
-        adapter.pull_subscribers
+        sleep 0.2
         expect($struct_updated_user_array.count).to eq(1)
         expect($struct_updated_user_array.first).to eq(EventObjects::Struct.new(user_id: 1))
 
         adapter.broadcast('shallow_user.updated', user_id: 1)
-        adapter.pull_subscribers
+        sleep 0.2
         expect($shallow_updated_user_array.count).to eq(1)
         expect($shallow_updated_user_array.first).to eq(EventObjects::Shallow.new(user_id: 1))
       end
