@@ -1,4 +1,6 @@
-require 'xmlsimple'
+# frozen_string_literal: true
+
+require "xmlsimple"
 
 module Hanami
   module Events

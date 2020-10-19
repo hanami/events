@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Hanami
   module Events
     # Subscriber class for calling subscriber blocks
@@ -50,7 +52,7 @@ module Hanami
       #
       # @api private
       def meta
-        { name: @event_name }
+        {name: @event_name}
       end
     end
   end

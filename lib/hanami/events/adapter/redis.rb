@@ -1,5 +1,7 @@
-require 'json'
-require 'securerandom'
+# frozen_string_literal: true
+
+require "json"
+require "securerandom"
 
 module Hanami
   module Events
@@ -10,8 +12,8 @@ module Hanami
       #
       # @api private
       class Redis
-        DEFAULT_STREAM = 'hanami.events'.freeze
-        EVENT_STORE = 'hanami.event_store'.freeze
+        DEFAULT_STREAM = "hanami.events"
+        EVENT_STORE = "hanami.event_store"
 
         attr_reader :subscribers, :logger
 
@@ -75,12 +77,12 @@ module Hanami
         end
 
         def call_subscribers(message)
-          @subscribers.each { |subscriber| subscriber.call(message['event_name'], message['payload']) }
+          @subscribers.each { |subscriber| subscriber.call(message["event_name"], message["payload"]) }
         end
 
         def with_connection_pool(redis)
           return redis if redis.is_a?(ConnectionPool)
-          raise ArgumentError, 'Please, provide an instance of Redis' unless redis.is_a?(::Redis)
+          raise ArgumentError, "Please, provide an instance of Redis" unless redis.is_a?(::Redis)
 
           ConnectionPool.new(size: 5, timeout: 5) { redis }
         end

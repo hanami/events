@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Hanami
   module Events
     # Mixin that extends class by `subscribe_to` method.
