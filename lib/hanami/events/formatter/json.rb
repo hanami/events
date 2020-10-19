@@ -1,4 +1,6 @@
-require 'json'
+# frozen_string_literal: true
+
+require "json"
 
 module Hanami
   module Events
@@ -22,7 +24,7 @@ module Hanami
         #
         # @since 0.1.0
         def format
-          { events: @events_meta }.to_json
+          {events: @events_meta}.to_json
         end
       end
     end

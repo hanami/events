@@ -1,4 +1,6 @@
-require 'dry/container'
+# frozen_string_literal: true
+
+require "dry/container"
 
 module Hanami
   module Events
@@ -7,7 +9,7 @@ module Hanami
       extend Dry::Container::Mixin
 
       register(:json) do
-        require_relative 'serializer/json'
+        require_relative "serializer/json"
         Json
       end
     end

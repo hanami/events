@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Hanami
   module Events
     # Matcher for event names.
@@ -11,23 +13,23 @@ module Hanami
     #
     # @api private
     class Matcher
-      MATCH_ALL_CHARS = '.*'.freeze
-      RANGE_PATTERN = '*'.freeze
+      MATCH_ALL_CHARS = ".*"
+      RANGE_PATTERN = "*"
 
       def initialize(pattern)
         @pattern = pattern.is_a?(Regexp) ? pattern : Regexp.new(to_regexp_string(pattern))
       end
 
       def match?(event_name)
-        !!@pattern.match(event_name) # rubocop:disable Style/DoubleNegation
+        !!@pattern.match(event_name)
       end
 
       private
 
       def to_regexp_string(pattern)
-        pattern.split('.')
-               .map { |p| p == RANGE_PATTERN ? MATCH_ALL_CHARS : Regexp.escape(p) }
-               .join('\.')
+        pattern.split(".")
+          .map { |p| p == RANGE_PATTERN ? MATCH_ALL_CHARS : Regexp.escape(p) }
+          .join('\.')
       end
     end
   end

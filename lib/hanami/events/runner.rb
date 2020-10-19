@@ -1,4 +1,6 @@
-require 'concurrent'
+# frozen_string_literal: true
+
+require "concurrent"
 
 module Hanami
   module Events
@@ -13,7 +15,7 @@ module Hanami
         @options = options
       end
 
-      def start(threads: 5) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+      def start(threads: 5)
         logger.info "Running in #{RUBY_DESCRIPTION}"
         logger.info "Started server with #{event_instance.adapter.class} adapter"
 

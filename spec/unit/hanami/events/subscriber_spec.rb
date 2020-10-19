@@ -1,58 +1,60 @@
-require 'logger'
+# frozen_string_literal: true
+
+require "logger"
 
 RSpec.describe Hanami::Events::Subscriber do
   let(:block) { proc { |payload| payload } }
-  let(:subscriber) { described_class.new('user.created', block) }
+  let(:subscriber) { described_class.new("user.created", block) }
 
-  describe '#call' do
-    context 'when event name matched' do
-      it 'calls event block' do
-        expect(subscriber.call('user.created', user_id: 1)).to eq(user_id: 1)
+  describe "#call" do
+    context "when event name matched" do
+      it "calls event block" do
+        expect(subscriber.call("user.created", user_id: 1)).to eq(user_id: 1)
       end
     end
 
-    context 'when event pattern match range' do
+    context "when event pattern match range" do
       let(:subscriber) { described_class.new(/\Auser.*/, block) }
 
-      it { expect(subscriber.call('user.created', user_id: 1)).to eq(user_id: 1) }
-      it { expect(subscriber.call('user.deleted', user_id: 1)).to eq(user_id: 1) }
-      it { expect(subscriber.call('post.deleted', post_id: 1)).to eq nil }
+      it { expect(subscriber.call("user.created", user_id: 1)).to eq(user_id: 1) }
+      it { expect(subscriber.call("user.deleted", user_id: 1)).to eq(user_id: 1) }
+      it { expect(subscriber.call("post.deleted", post_id: 1)).to eq nil }
     end
 
-    context 'when event pattern match all' do
-      let(:subscriber) { described_class.new('*', block) }
+    context "when event pattern match all" do
+      let(:subscriber) { described_class.new("*", block) }
 
-      it { expect(subscriber.call('user.created', user_id: 1)).to eq(user_id: 1) }
-      it { expect(subscriber.call('user.deleted', user_id: 1)).to eq(user_id: 1) }
-      it { expect(subscriber.call('post.deleted', post_id: 1)).to eq(post_id: 1) }
+      it { expect(subscriber.call("user.created", user_id: 1)).to eq(user_id: 1) }
+      it { expect(subscriber.call("user.deleted", user_id: 1)).to eq(user_id: 1) }
+      it { expect(subscriber.call("post.deleted", post_id: 1)).to eq(post_id: 1) }
     end
 
-    context 'when event name not matched' do
-      it 'calls nothing' do
-        expect(subscriber.call('user.deleted', user_id: 1)).to eq nil
+    context "when event name not matched" do
+      it "calls nothing" do
+        expect(subscriber.call("user.deleted", user_id: 1)).to eq nil
       end
     end
 
-    context 'with logger' do
-      let(:block) { ->(_payload) { logger.info('in event') } }
+    context "with logger" do
+      let(:block) { ->(_payload) { logger.info("in event") } }
       let(:logger) { Logger.new(StringIO.new) }
-      let(:subscriber) { described_class.new('user.created', block, logger) }
+      let(:subscriber) { described_class.new("user.created", block, logger) }
 
-      it 'calls logger' do
-        expect(logger).to receive(:info).with('in event')
-        subscriber.call('user.created', user_id: 1)
+      it "calls logger" do
+        expect(logger).to receive(:info).with("in event")
+        subscriber.call("user.created", user_id: 1)
       end
     end
 
-    context 'when handler try to call protected objects' do
+    context "when handler try to call protected objects" do
       let(:block) { ->(_payload) { meta } }
-      let(:subscriber) { described_class.new('user.created', block) }
+      let(:subscriber) { described_class.new("user.created", block) }
 
-      it { expect { subscriber.call('user.created', user_id: 1) }.to raise_error(NameError) }
+      it { expect { subscriber.call("user.created", user_id: 1) }.to raise_error(NameError) }
     end
   end
 
-  describe '#meta' do
-    it { expect(subscriber.meta).to eq(name: 'user.created') }
+  describe "#meta" do
+    it { expect(subscriber.meta).to eq(name: "user.created") }
   end
 end

@@ -1,7 +1,9 @@
-require 'simplecov'
-SimpleCov.start { add_filter '/spec' }
+# frozen_string_literal: true
 
-require 'hanami/events'
+require "simplecov"
+SimpleCov.start { add_filter "/spec" }
+
+require "hanami/events"
 
 RSpec.configure do |config|
   config.expect_with :rspec do |expectations|
@@ -20,7 +22,7 @@ RSpec.configure do |config|
 
   config.warnings = true
 
-  config.default_formatter = 'doc' if config.files_to_run.one?
+  config.default_formatter = "doc" if config.files_to_run.one?
   config.profile_examples = 10
 
   config.order = :random

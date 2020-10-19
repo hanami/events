@@ -1,4 +1,6 @@
-require 'securerandom'
+# frozen_string_literal: true
+
+require "securerandom"
 
 module Hanami
   module Events
@@ -26,7 +28,7 @@ module Hanami
         # @since 0.1.0
         def broadcast(event_name, payload)
           event_id = SecureRandom.uuid
-          @event_queue << { id: event_id, name: event_name, payload: payload }
+          @event_queue << {id: event_id, name: event_name, payload: payload}
           event_id
         end
 

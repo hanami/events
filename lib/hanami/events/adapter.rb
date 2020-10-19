@@ -1,4 +1,6 @@
-require 'dry/container'
+# frozen_string_literal: true
+
+require "dry/container"
 
 module Hanami
   module Events
@@ -13,17 +15,17 @@ module Hanami
       extend Dry::Container::Mixin
 
       register(:memory_sync) do
-        require_relative 'adapter/memory_sync'
+        require_relative "adapter/memory_sync"
         MemorySync
       end
 
       register(:memory_async) do
-        require_relative 'adapter/memory_async'
+        require_relative "adapter/memory_async"
         MemoryAsync
       end
 
       register(:redis) do
-        require_relative 'adapter/redis'
+        require_relative "adapter/redis"
         Redis
       end
     end

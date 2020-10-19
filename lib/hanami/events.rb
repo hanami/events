@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "hanami/events/adapter"
 require "hanami/events/serializer"
 require "hanami/events/formatter"
@@ -40,7 +42,7 @@ module Hanami
       def new(adapter_name, **options)
         Base.new(adapter_name, options)
       end
-      alias initialize new
+      alias_method :initialize, :new
     end
   end
 end
