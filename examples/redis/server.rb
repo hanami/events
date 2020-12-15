@@ -3,7 +3,7 @@ require 'hanami/events'
 require 'redis'
 require 'connection_pool'
 
-redis = ConnectionPool.new(size: 5, timeout: 5) { Redis.new(host: '0.0.0.0', port: 6379) }
+redis = ConnectionPool.new(size: 5, timeout: 5) { Redis.new(host: 'localhost', port: 6379) }
 events = Hanami::Events.initialize(:redis, redis: redis, logger: Logger.new(STDOUT))
 
 events.subscribe('user.created') { |payload| logger.info "Create user: #{payload}" }
