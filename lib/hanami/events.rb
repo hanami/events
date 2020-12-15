@@ -35,7 +35,7 @@ module Hanami
       #
       # @example redis adapter
       #
-      #   redis = ConnectionPool.new(size: 5, timeout: 5) { Redis.new(host: 'localhost', port: 6379) }
+      #   redis = ConnectionPool.new(size: 5, timeout: 5) { Redis.new(host: '0.0.0.0', port: 6379) }
       #   Hanami::Events.new(:redis, redis: redis)
       def new(adapter_name, **options)
         Base.new(adapter_name, options)

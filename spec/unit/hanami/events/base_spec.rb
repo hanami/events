@@ -7,7 +7,7 @@ RSpec.describe Hanami::Events::Base do
   describe 'broadcast' do
     it 'calls broadcast on adapter' do
       expect_any_instance_of(Hanami::Events::Adapter::MemorySync).to(
-        receive(:broadcast).with('user.created', user_id: 1)
+        receive(:broadcast).with('user.created', { user_id: 1 }, {})
       )
       event_bus.broadcast('user.created', user_id: 1)
     end

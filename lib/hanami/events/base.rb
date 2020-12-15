@@ -18,8 +18,8 @@ module Hanami
       # @param payload [Hash] the event data
       #
       # @since 0.1.0
-      def broadcast(event, **payload)
-        adapter.broadcast(event, payload)
+      def broadcast(event, payload = EMPTY_HASH, kwargs = EMPTY_HASH)
+        adapter.broadcast(event, payload, kwargs)
       end
 
       # Calls subscribes for selected adapter
