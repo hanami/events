@@ -30,7 +30,7 @@ module Hanami
         # @param payload [Hash] the event data
         #
         # @since 0.1.0
-        def broadcast(event_name, payload)
+        def broadcast(event_name, payload, _kwargs = EMPTY_HASH)
           event_id = SecureRandom.uuid
 
           @redis.with do |conn|

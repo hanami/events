@@ -9,7 +9,7 @@ module Hanami
       attr_reader :adapter
 
       def initialize(adapter_name, options)
-        @adapter = Adapter[adapter_name.to_sym].new(options)
+        @adapter = Adapter[adapter_name.to_sym].new(**options)
       end
 
       # Brodcasts event to all subscribes
@@ -18,8 +18,8 @@ module Hanami
       # @param payload [Hash] the event data
       #
       # @since 0.1.0
-      def broadcast(event, **payload)
-        adapter.broadcast(event, payload)
+      def broadcast(event, payload = EMPTY_HASH, kwargs = EMPTY_HASH)
+        adapter.broadcast(event, payload, kwargs)
       end
 
       # Calls subscribes for selected adapter

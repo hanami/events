@@ -21,7 +21,7 @@ RSpec.describe Hanami::Events do
     end
 
     it 'calls #broadcast on adapter' do
-      expect(event.adapter).to receive(:broadcast).with('user.created', user_id: 1)
+      expect(event.adapter).to receive(:broadcast).with('user.created', { user_id: 1 }, {})
       event.broadcast('user.created', user_id: 1)
     end
   end

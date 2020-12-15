@@ -20,7 +20,7 @@ module Hanami
         # @param payload [Hash] the event data
         #
         # @since 0.1.0
-        def broadcast(event_name, payload)
+        def broadcast(event_name, payload, _kwargs = EMPTY_HASH)
           @subscribers.map do |subscriber|
             subscriber.call(event_name, payload)
           end

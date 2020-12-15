@@ -27,7 +27,7 @@ module Hanami
       module ClassMethods
         def subscribe_to(event_bus, event_name, kwargs = EMPTY_HASH)
           klass = self
-          event_bus.subscribe(event_name, kwargs) { |payload| klass.new.call(payload) }
+          event_bus.subscribe(event_name, **kwargs) { |payload| klass.new.call(payload) }
         end
       end
     end

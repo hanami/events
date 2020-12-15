@@ -1,3 +1,5 @@
+require 'concurrent/async'
+
 module Hanami
   module Events
     # Class for start subscribe loop runner

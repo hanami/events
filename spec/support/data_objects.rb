@@ -6,8 +6,8 @@ class EventObjects
   class Pure
     attr_reader :user_id
 
-    def initialize(user_id:)
-      @user_id = user_id
+    def initialize(opts)
+      @user_id = opts[:user_id]
     end
 
     def ==(other)
@@ -16,7 +16,7 @@ class EventObjects
   end
 
   module Types
-    include Dry::Types.module
+    include Dry::Types()
   end
 
   class Struct < Dry::Struct
